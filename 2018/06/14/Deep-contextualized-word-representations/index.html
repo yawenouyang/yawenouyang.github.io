@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="yOUng&#39;s Blog">
 <meta property="og:description" content="概述本文是NAACL2018最佳论文，提出了一个新的词向量模型ELMo(Embeddings from Language Models)，论文链接：https://arxiv.org/abs/1802.05365。 由于词向量模型可以从大量的未标记数据中学到语法和语义信息，所以在大量的NLP任务中都会用到，但存在的问题是模型训练好后每个词的词向量是固定的，即与上下文无关(context-indep">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-15T13:32:22.215Z">
+<meta property="og:updated_time" content="2018-06-17T07:39:11.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Deep contextualized word representations">
 <meta name="twitter:description" content="概述本文是NAACL2018最佳论文，提出了一个新的词向量模型ELMo(Embeddings from Language Models)，论文链接：https://arxiv.org/abs/1802.05365。 由于词向量模型可以从大量的未标记数据中学到语法和语义信息，所以在大量的NLP任务中都会用到，但存在的问题是模型训练好后每个词的词向量是固定的，即与上下文无关(context-indep">
@@ -339,7 +339,7 @@
 <p>最大化似然函数：</p>
 <script type="math/tex; mode=display">\sum_{k+1}^{N}{(\log_p(t_k|t_1,...,t_{k-1};\theta_x,\overrightarrow{\theta}_{LSTM},\theta_s)+\log_p(t_k|t_{k+1},...,t_N;\theta_x,\overleftarrow{\theta}_{LSTM},\theta_s))}</script><p>由上式可以看出，正向和反向共享表示($\theta_x$)和隐藏层参数($\theta_s$)。</p>
 <h3 id="ELMo"><a href="#ELMo" class="headerlink" title="ELMo"></a>ELMo</h3><p>得到各层的隐层状态后：</p>
-<script type="math/tex; mode=display">R_k=\{x_k^{LM},\overrightarrow{h}_{k,L}^{LM},\overleftarrow{h}_{k,L}^{LM}|\,j=1,...,L\}=\{h_{k,j}^{LM}|\,j=0,...,L\}</script><script type="math/tex; mode=display">ELMo_k^{task}=E(R_k;\theta^{task})=\gamma^{task}\sum_{j=0}^L{s_j^{task}h_{k,j}^{LM}}</script><p>这里$s^{task}$相当于相同层内，不同位置的attention，由于${ELMo_k^{task}}$只是任务模型输入的一部分(下文会提到)，所以$\gamma$对优化也有意义。文中同样指出，由于每一层具有的信息抽象程度不同，也可以为层之间加attention。</p>
+<script type="math/tex; mode=display">R_k=\{x_k^{LM},\overrightarrow{h}_{k,L}^{LM},\overleftarrow{h}_{k,L}^{LM}|\,j=1,...,L\}=\{h_{k,j}^{LM}|\,j=0,...,L\}</script><script type="math/tex; mode=display">ELMo_k^{task}=E(R_k;\theta^{task})=\gamma^{task}\sum_{j=0}^L{s_j^{task}h_{k,j}^{LM}}</script><p>这里$s^{task}$相当于层间的attention，由于每一层具有的信息抽象程度不同，所以可以为层之间加attention，由于${ELMo_k^{task}}$只是任务模型输入的一部分(下文会提到)，所以$\gamma$对优化也有意义。。</p>
 <h3 id="Using-biLMs-for-supervised-NLP-tasks"><a href="#Using-biLMs-for-supervised-NLP-tasks" class="headerlink" title="Using biLMs for supervised NLP tasks"></a>Using biLMs for supervised NLP tasks</h3><p>给定一个预训练好的biLM和NLP task的模型，就可以使用biLM了，输入可以是与文本无关的预训练好的词向量$x_k$或者加上些字符信息(用CNN对单词中的字母做卷积)，然后就可以把$[x_k,ELMo_k^{task}]$输进任务模型里。</p>
 <p>值得注意的是，在训练biLM(两层的LSTM)时，LSTM每一层之间也加入了残差项，输入是character-based的表示(使用CNN对词中的字母进行卷积)。</p>
 <p>这里有一点困惑预训练biLM用的输入是character-based，使用时用的输入是word embedding(+ character-based)，不会有影响吗…</p>

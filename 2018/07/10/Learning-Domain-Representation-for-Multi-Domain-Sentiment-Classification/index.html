@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="mtl,cross domain,sentiment," />
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="Yawen Ouyang&apos;s Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="yOUng&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2018/index.html">
+<meta name="description" content="概述本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。 模型生成domain-specific">
+<meta name="keywords" content="mtl,cross domain,sentiment">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning Domain Representation for Multi-Domain Sentiment Classification">
+<meta property="og:url" content="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/index.html">
 <meta property="og:site_name" content="yOUng&#39;s Blog">
-<meta property="og:description" content="Yawen Ouyang&apos;s Blog">
+<meta property="og:description" content="概述本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。 模型生成domain-specific">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/mtl.png">
+<meta property="og:updated_time" content="2018-07-11T04:16:07.750Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="yOUng&#39;s Blog">
-<meta name="twitter:description" content="Yawen Ouyang&apos;s Blog">
+<meta name="twitter:title" content="Learning Domain Representation for Multi-Domain Sentiment Classification">
+<meta name="twitter:description" content="概述本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。 模型生成domain-specific">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/mtl.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/"/>
 
 
 
 
 
-  <title>Archive | yOUng's Blog</title>
+  <title>Learning Domain Representation for Multi-Domain Sentiment Classification | yOUng's Blog</title>
   
 
 
@@ -143,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,185 +251,158 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Learning Domain Representation for Multi-Domain Sentiment Classification</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-10T21:01:50+08:00">
+                2018-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        Um..! 4 posts in total. Keep on posting.
-      </span>
 
-      
-
-        
-        
-        
-
-        
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
+            
+          
 
-        
+          
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/" itemprop="url">
-              
-                <span itemprop="name">Learning Domain Representation for Multi-Domain Sentiment Classification</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-10T21:01:50+08:00"
-              content="2018-07-10" >
-          07-10
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+        </div>
+      </header>
+    
 
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/09/论文札记/" itemprop="url">
-              
-                <span itemprop="name">论文札记</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-09T15:03:51+08:00"
-              content="2018-07-09" >
-          07-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/06/14/Deep-contextualized-word-representations/" itemprop="url">
-              
-                <span itemprop="name">Deep contextualized word representations</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-06-14T15:15:33+08:00"
-              content="2018-06-14" >
-          06-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/mtl.png" alt="model"><br>生成domain-specific的文本表示$I^i_j$(第i个domain的第j个样本)时，各个时刻上的权重即attention是使用additive attention的方式，key是第i个domain的domain descriptor $N_i$，本文为了强调各个domain之间的关系，各个domain descriptor之间做了self attention：$N_i^{new}=N softmax(N^TN_i)$</p>
+<p>为了更好地使用training data，把training data加到了Memory Network中，对于第i个domain的Memory，把第j个训练样本设置为第j列：$M^i_j = I^i_j$，在使用时得到输入$I^i_j$后，通过dot product attention来求得文本向量$C^i_j = M^isoftmax((M^i)^TI^i_j)$，然后把context vector和domain specific拼起来进行预测。</p>
+<p>这里memory size $|M^i|$等于训练样本的数目，可能会非常大，这里文中提出了两种压缩memory size的策略。第一种是令$|M^i|=|V|$，即Memory Network的每一列表示一个单词，对于训练数据$I^i_j$只更新输入序列$s^i_j$中包含的单词的对应列：$M^i_w = decay*M^i_w + (1-decay)I^i_j$。第二种是先固定$|M^i|$，然后$I^i_j$只更新列中与其最相似的那一列，即$argmax(M^i)^TI^i_j$，这样的话类似情感的输入进行了聚类，来更新相同的一列。</p>
+<p>模型的右上角加了一个对抗训练，论文中给的解释看不太懂，这里是又显示使用了一遍domain信息进行训练。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>在in-domain和cross-domain两方面验证模型的有效性，in-domain就是test data在m个training domain里，cross-domain就是test data来自unknown domain。</p>
+<p>由于数据集非常均衡，所以这里验证指标只使用了Accuracy。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文提出用self-attention来加强各个domain之间的关联，使用Memory来更显示的使用训练数据，引入对抗训练来强调domain信息，这些做法值得借鉴。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/06/13/hello-world/" itemprop="url">
-              
-                <span itemprop="name">Hello World</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-06-13T19:49:43+08:00"
-              content="2018-06-13" >
-          06-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mtl/" rel="tag"># mtl</a>
+          
+            <a href="/tags/cross-domain/" rel="tag"># cross domain</a>
+          
+            <a href="/tags/sentiment/" rel="tag"># sentiment</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/09/论文札记/" rel="next" title="论文札记">
+                <i class="fa fa-chevron-left"></i> 论文札记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -433,6 +410,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -453,8 +434,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -515,6 +505,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">3.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -648,6 +654,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

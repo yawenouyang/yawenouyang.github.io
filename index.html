@@ -262,6 +262,261 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/" itemprop="url">Learning Domain Representation for Multi-Domain Sentiment Classification</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-10T21:01:50+08:00">
+                2018-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/mtl.png" alt="model"><br>生成domain-specific的文本表示$I^i_j$(第i个domain的第j个样本)时，各个时刻上的权重即attention是使用additive attention的方式，key是第i个domain的domain descriptor $N_i$，本文为了强调各个domain之间的关系，各个domain descriptor之间做了self attention：$N_i^{new}=N softmax(N^TN_i)$</p>
+<p>为了更好地使用training data，把training data加到了Memory Network中，对于第i个domain的Memory，把第j个训练样本设置为第j列：$M^i_j = I^i_j$，在使用时得到输入$I^i_j$后，通过dot product attention来求得文本向量$C^i_j = M^isoftmax((M^i)^TI^i_j)$，然后把context vector和domain specific拼起来进行预测。</p>
+<p>这里memory size $|M^i|$等于训练样本的数目，可能会非常大，这里文中提出了两种压缩memory size的策略。第一种是令$|M^i|=|V|$，即Memory Network的每一列表示一个单词，对于训练数据$I^i_j$只更新输入序列$s^i_j$中包含的单词的对应列：$M^i_w = decay*M^i_w + (1-decay)I^i_j$。第二种是先固定$|M^i|$，然后$I^i_j$只更新列中与其最相似的那一列，即$argmax(M^i)^TI^i_j$，这样的话类似情感的输入进行了聚类，来更新相同的一列。</p>
+<p>模型的右上角加了一个对抗训练，论文中给的解释看不太懂，这里是又显示使用了一遍domain信息进行训练。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>在in-domain和cross-domain两方面验证模型的有效性，in-domain就是test data在m个training domain里，cross-domain就是test data来自unknown domain。</p>
+<p>由于数据集非常均衡，所以这里验证指标只使用了Accuracy。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文提出用self-attention来加强各个domain之间的关联，使用Memory来更显示的使用训练数据，引入对抗训练来强调domain信息，这些做法值得借鉴。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/09/论文札记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/09/论文札记/" itemprop="url">论文札记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-09T15:03:51+08:00">
+                2018-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>有的论文读完，受用的地方不多，不足以写成论文笔记，就集中记录于此。</p>
+<p>Title: Exploiting Document Knowledge for Aspect-level Sentiment Classification</p>
+<p>概述: 主要是解决Aspect-level的情感分类问题，引入Document-level的进行辅助。</p>
+<p>总结:</p>
+<ol>
+<li>解决Aspect-level问题时，使用的是LSTM+ATT模型，是为了方便opinion target(aspect term)更方便注意到opinion word，这也是sota的做法。需要注意的是使用opinion word的平均词向量(opinion word可以多个词，比如: service quality)作为ATT中的key。</li>
+<li>引入Document-level时，使用了MTL的方法，但loss function是两任务损失函数的加权和，需要注意的是，这两个任务的数据集完全不同，所以对于任意一个数据集都无法同时计算两个loss，向师兄请教后，一种解决方法是对于一组batch，可以输入两个数据集的混合，分别计算两者的loss，再加权，个人觉得，这样做跟使用两个损失函数，使用不同学习率差别不大…</li>
+<li>作者还通过加入不同比例的document-level的数据，来观察aspect-level的准确率的变化，这种实验方法也需要学习一下。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/Deep-contextualized-word-representations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -563,7 +818,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -576,7 +831,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

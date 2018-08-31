@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="录用于：ICDM’15;  链接：https://ieeexplore.ieee.org/document/7373356/ 本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。 该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Beyond Query: Interactive User Intention Understanding">
+<meta property="og:url" content="http://yoursite.com/2018/08/29/Beyond-Query-Interactive-User-Intention-Understanding/index.html">
+<meta property="og:site_name" content="yOUng&#39;s Blog">
+<meta property="og:description" content="录用于：ICDM’15;  链接：https://ieeexplore.ieee.org/document/7373356/ 本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。 该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-08-31T03:00:19.233Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Beyond Query: Interactive User Intention Understanding">
+<meta name="twitter:description" content="录用于：ICDM’15;  链接：https://ieeexplore.ieee.org/document/7373356/ 本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。 该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/29/Beyond-Query-Interactive-User-Intention-Understanding/"/>
+
+
+
+
+
+  <title>Beyond Query: Interactive User Intention Understanding | yOUng's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yOUng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/Beyond-Query-Interactive-User-Intention-Understanding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Beyond Query: Interactive User Intention Understanding</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T16:36:21+08:00">
+                2018-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>录用于：ICDM’15;  链接：<a href="https://ieeexplore.ieee.org/document/7373356/" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/7373356/</a></p>
+<p>本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。</p>
+<p>该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond query的原因。关键点在于生成尽可能少的问题来检索到正确的目标。</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>心理学家和教育学家都认为通过问答的方式能比简单的陈述获得更精确的信息，这也好理解，所以这也是本文的动机之一，通过一系列交互式的问题帮用户确定他们的需求。</p>
+<p>本文的主要贡献有三点：</p>
+<ol>
+<li>生成的交互式模型不需要用户打字输入，只需要选择就好了。</li>
+<li>考虑到用户在回答的过程中会不小心打错，也提供也一些容错机制。</li>
+<li>在生成问题序列方法提供了一个新方法Interactive Heuristic Search (IHS)。</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>形式化问题：</p>
+<ol>
+<li>Tag Matrix. Tag矩阵引入的目的是为了表示item，Matrix <script type="math/tex">\in \{-1, 1\} ^ {n \times m}</script>，这里n是item的数量(事先给定)，m是tag的数量，tag可以是item的属性(attribute)或特征(feature)。</li>
+<li>Yes-or-No Question. 表示为$(q_i,l)$，表示出现在第i个问题中的标签q，<script type="math/tex">l \in \{-1,1\}</script>表示用户的选择yes,no。相当于在问用户要找的target中是否含有这个这个标签tag，以此来筛选候选的item。</li>
+</ol>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>大致思路就是给每个候选item一个权重，使用向量$w^{(t)}$来表示t时刻所有item的权重，在每一轮的问答过后更新这个权重，最后根据权重做推荐。具体的，各个item的初始权重都是1，并引入一个discount factor $\gamma \in [0,1)$来减少权重，比如用户的回答中表现出了对带有tag的item不感兴趣，则对这些item的权重进行衰减，衰减后的权重为$w\gamma$。</p>
+<p>算法的整体流程为：</p>
+<h3 id="生成问题顺序策略之Greedy"><a href="#生成问题顺序策略之Greedy" class="headerlink" title="生成问题顺序策略之Greedy"></a>生成问题顺序策略之Greedy</h3><p>首先提出了最基础的贪心算法作为baseline，算法的主要思想是找到一个tag，使得$||w||_1$减少最多，由于w都是大于0的，也等价于使得所有item的权重之和减少最多。</p>
+<p>假设我们在一轮的问答中询问用户要找的target里是否含有tag q，这时所有的item可分为两类，一类是含有tag q的，即对于Tag Matrix矩阵X来说，$X_{iq}=1$，用<script type="math/tex"><w^{(t)},X_q></script>和<script type="math/tex"><w^{(t)},1-X_q></script>来表示有tag q和没有tag q的两类的权重之和，因为不确定用户会选1还是0，所以两个类中哪个类的item进行衰减并不确定，因为衰减只会发生在一个类别，而且同一类别的所有item的权重都要衰减，故总的衰减相当于一个类别的权重之和与$1-\gamma$相乘，即与一个类别的权重之和成正比，令</p>
+<script type="math/tex; mode=display">\alpha = min \{\frac{<w^{(t)},X_q>}{||w^{(t)}||_1}，\frac{<w^{(t)},1-X_q>}{||w^{(t)}||_1}\}</script><script type="math/tex; mode=display">E(q)=||w^{(t)}||_1^{-1}<w^{(t)},X_q></script><p>由于</p>
+<script type="math/tex; mode=display">\frac{1}{||w^{(t)}||_1}(<w^{(t)},X_q>+<w^{(t)},1-X_q>)=1</script><p>故最大化$\alpha$相当于最大化$min(E(q),1-E(q))$，相当于最小化$|E(q)-0.5|$，所以，也就是说找到使得$|E(q)-0.5|$最小的tag q就好了。</p>
+<script type="math/tex; mode=display">q = argmin|E(q)-0.5|</script><p>显然这种方法的局限性是只考虑一步，也就只是考虑下一个问题的生成。</p>
+<h3 id="生成问题顺序策略之Interactive-Heuristic-Search"><a href="#生成问题顺序策略之Interactive-Heuristic-Search" class="headerlink" title="生成问题顺序策略之Interactive Heuristic Search"></a>生成问题顺序策略之Interactive Heuristic Search</h3><p>该方法试着考虑下面k个问题<script type="math/tex">Q_k=\{q_1,q_2,...,q_k\}</script>，对应的用户可能输入的答案为<script type="math/tex">\textbf{l} = \{l_1l_2...l_k\} \in \{0,1\}^k</script>。</p>
+<p>在回答完第t个问题后权重，第i个item的权重$w_i$更新为</p>
+<script type="math/tex; mode=display">w_i^{(t+1)}=w_i^{(t)}\gamma^{l\oplus x_{iq_t}}</script><p>解释为用户的答案跟$x_{iq_t}$(代表第i个item是否含有第t个问题中所具有的标签)是否相同，不同则做衰减，相当于用户需要(不需要)这个标签，而这个item没有(有)这个标签，就会做衰减。</p>
+<p>因此在k轮问答后，第i个item的权重为<script type="math/tex">w_i\prod_{k}^{j=1}\gamma^{l_j\oplus x_{ij}}</script></p>
+<p>总衰减：</p>
+<script type="math/tex; mode=display">W[Q|\textbf{l}]=\sum_i w_i(1-\prod_{k}^{j=1}\gamma^{l_j\oplus x_{ij}})</script><p>由于每一个问题总会两个解，所以一个问题序列会有$2^k$个回答序列，也就会对应$2^k$衰减值，应该考虑这些衰减值中最小的，再比较所有问题序列的最小值，挑出最大的那个序列作为最优解。由于每轮都要得到用户的回答，所以称之为Interactive Heuristic Search。</p>
+<p>接下来本文又举例进行更详细的说明，这里不在赘述。</p>
+<p>关于何时停止的问题，文中假设找到正确的target item需要轮数t，此时target item出现在weight最高的前L个item里，文中证明了L的期望：</p>
+<script type="math/tex; mode=display">E[L] \leq \frac{(2r)^tn}{2}e^s + 1</script><p>这里：</p>
+<script type="math/tex; mode=display">r=((2-4p)\tau^2-(2-4p)\tau+1-p)</script><script type="math/tex; mode=display">s=-t/4+p(t-1)(1-p)</script><p>p为用户犯错的概率，$\tau$为Tag Matrix随机初始化为1的概率</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>实验对比了三个模型，Interactive Heuristic Search(IHS), Greedy, and Static Heuristic Search(SHS), SHS是一次性生成两个问题，即每两轮跟用户进行一次交互，即无论用户第一个问题如何回答，都直接问准备好的第二个问题，然后根据这两个回答继续生成下两个问题，验证的是与用户交互的重要性。</p>
+<p>选了三个数据集以问答的轮数做为评价指标，实验结果证明了IHS效果更好，比其他两个方法所需要的轮数少，更具有容错性，即在用户犯错误的概率p增大时，所需要的轮数与其他方法的轮数的差距增大。</p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>每轮交互要花很长的时间去考虑下一轮的问题，文中提出了可以用决策树来改进。</p>
+<p>没考虑到item的受欢迎程度，一般越受欢迎的item，越可能是target。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是通过一系列问答方式来判断用户意图，这里用户意图指的是某个target，而算法的目标是以尽可能少的问答轮数来从候选的item中检索到这个target。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/29/用户意图识别/" rel="next" title="用户意图识别">
+                <i class="fa fa-chevron-left"></i> 用户意图识别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">young</p>
+              <p class="site-description motion-element" itemprop="description">Yawen Ouyang's Blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yawenouyang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架"><span class="nav-number">3.1.</span> <span class="nav-text">框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成问题顺序策略之Greedy"><span class="nav-number">3.2.</span> <span class="nav-text">生成问题顺序策略之Greedy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成问题顺序策略之Interactive-Heuristic-Search"><span class="nav-number">3.3.</span> <span class="nav-text">生成问题顺序策略之Interactive Heuristic Search</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后续"><span class="nav-number">5.</span> <span class="nav-text">后续</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

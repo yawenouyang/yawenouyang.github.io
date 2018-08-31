@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Machine Learning,Multi-Label Learning," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述多标签学习任务中，一个样本往往具有多个标签，以往在多标签学习中，标签的种类是确定的，即测试集出现的标签都在训练集中出现过，无新标签的出现。 然而在实际的应用中，数据流中往往伴随着新的标签，如何发现这些新标签，是本文工作的重点。本文提出的MuENL(即标题的缩写)着重解决了以下问题：对已知标签进行判别；发现新标签；对新标签重新构造同已知标签一样的分类器(classifier)。 论文链接：htt">
+<meta name="keywords" content="Machine Learning,Multi-Label Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Multi-Label Learning with Emerging New Labels">
+<meta property="og:url" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/index.html">
+<meta property="og:site_name" content="yOUng&#39;s Blog">
+<meta property="og:description" content="概述多标签学习任务中，一个样本往往具有多个标签，以往在多标签学习中，标签的种类是确定的，即测试集出现的标签都在训练集中出现过，无新标签的出现。 然而在实际的应用中，数据流中往往伴随着新的标签，如何发现这些新标签，是本文工作的重点。本文提出的MuENL(即标题的缩写)着重解决了以下问题：对已知标签进行判别；发现新标签；对新标签重新构造同已知标签一样的分类器(classifier)。 论文链接：htt">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/algorithm.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/MuENLTree.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/newClassifier.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/optProcess.png">
+<meta property="og:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/update.png">
+<meta property="og:updated_time" content="2018-08-31T03:05:30.605Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Multi-Label Learning with Emerging New Labels">
+<meta name="twitter:description" content="概述多标签学习任务中，一个样本往往具有多个标签，以往在多标签学习中，标签的种类是确定的，即测试集出现的标签都在训练集中出现过，无新标签的出现。 然而在实际的应用中，数据流中往往伴随着新的标签，如何发现这些新标签，是本文工作的重点。本文提出的MuENL(即标题的缩写)着重解决了以下问题：对已知标签进行判别；发现新标签；对新标签重新构造同已知标签一样的分类器(classifier)。 论文链接：htt">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/algorithm.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/"/>
+
+
+
+
+
+  <title>Multi-Label Learning with Emerging New Labels | yOUng's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yOUng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Multi-Label Learning with Emerging New Labels</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T08:48:17+08:00">
+                2018-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>多标签学习任务中，一个样本往往具有多个标签，以往在多标签学习中，标签的种类是确定的，即测试集出现的标签都在训练集中出现过，无新标签的出现。</p>
+<p>然而在实际的应用中，数据流中往往伴随着新的标签，如何发现这些新标签，是本文工作的重点。本文提出的MuENL(即标题的缩写)着重解决了以下问题：对已知标签进行判别；发现新标签；对新标签重新构造同已知标签一样的分类器(classifier)。</p>
+<p>论文链接：<a href="https://ieeexplore.ieee.org/document/8305522/" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/8305522/</a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在动态的环境中，样本通常以数据流(data stream)的形式到达，样本中可能混合着新标签和已知标签，而我们对样本中可能存在的新标签无任何先验知识。新样本到来后，还要及时对已学模型进行更新。</p>
+<p>本文提出的MuENL主要有三部分组成：</p>
+<ol>
+<li>构建分类器来优化成对标签排名损失(pairwise label ranking loss，后面会具体讲述该损失的作用)和对已知标签的分类。</li>
+<li>构建探测器(detector)来根据样本的input feature和预测的label attribute检测是否含有新标签。</li>
+<li>对分类器和检测器的更新程序。</li>
+</ol>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>多标签学习任务中可以根据是否考虑标签之间的关系分为三大类：</p>
+<ol>
+<li>不考虑标签之间的关系， 比如为每个标签训练一个分类器。</li>
+<li>考虑两两标签之间的关系，在这个策略下，CLR把多标签分类任务转化成了成对标签排名任务。</li>
+<li>考虑所有标签之间的关系。</li>
+</ol>
+<p>这里主要讲解一下第二类，因为本文也用到了CLR(calibrated label ranking)，讲CLR之前，必须要说一下label ranking任务。</p>
+<p>label ranking的目的是对样本对应的类别标签(标签集固定)进行排序，比如样本空间X对应的标签集为{a,b,c,d}，其中一个样本x对应的标签排名是b,a,d,c。</p>
+<p>如何获得标签排名呢？主要有两个方法：pairwise comparison(RPC)和constrainy classification(CC，这里不做介绍)，RPC主要考虑两两标签之间的关系比如构建一个binary model $M_{ij}(x)$来预测x更偏向于类别i还是类别j，这种方法要构建所有标签的两两之间的关系，然后通过一个投票机制来获得与两两类别比较的结果，尽可能一致的排名结果。</p>
+<p>但RPC有一个问题，它虽然能给出标签之间的相应排名，但无法判断一个样本是否是属于某个标签，比如样本x对应的标签排名是b,a,d,c,但只能说x最像标签b，然后是a，但无法判断是不是标签b和a。</p>
+<p>CLR就解决了这个问题，CLR同时解决了多标签分类和排名问题，具体做法是如果原先样本空间X对应的标签集为{$\lambda_1$,…,$\lambda_c$}，再往里加入一个标签$\lambda_0$来作为校准标签，如果一个标签排在该标签前则视为相关标签，否则则视为不相关标签，这样就同时解决了label ranking任务和分类问题。</p>
+<h2 id="MUENL方法"><a href="#MUENL方法" class="headerlink" title="MUENL方法"></a>MUENL方法</h2><p>为了以后更方便的描述，先进行一些符号定义：<br>$X_0$是训练集中实例，$x_t$是t时刻到达的数据，$X_t$是t时刻可使用的总数据。</p>
+<p>$Y_0$是训练集中的标签，<script type="math/tex">Y_0 \in \{-1,1\}^{l \times n}</script>，$l$是标签的数量，$n$是样本的数量。</p>
+<p>函数集<script type="math/tex">\mathcal{H}_t = [h_{t,1},h_{t,2},...,h_{t,l},D_t]</script>，$h_{t,j}: \mathcal{X} -&gt; {-1,1}^l$, $D_t$是用来判别新标签。</p>
+<p>$v_t$表示的是t时刻已知的标签集。</p>
+<p>算法的整体流程为：</p>
+<p><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/algorithm.png" alt="流程"></p>
+<p>这里引入了一个buffer集，当detector预测为1的时候把样本加入到buffer集，buffer集满的时候才开始更新，为的是有足够的数据来更新分类器。但这样又有一个问题，buffer集里可能存在不同种类的新标签。论文里给的解释是：Although we have mentioned only one new label in the definition, the algorithm admits multiple new labels to emerge in the same period. In this scenario, the multiple new labels can be treated as a single meta new label for the purpose of prediction of $x_t$ and model update.</p>
+<h3 id="The-Multi-Label-Classifier"><a href="#The-Multi-Label-Classifier" class="headerlink" title="The Multi-Label Classifier"></a>The Multi-Label Classifier</h3><h3 id="New-Label-Detection"><a href="#New-Label-Detection" class="headerlink" title="New Label Detection"></a>New Label Detection</h3><p>本文在新标签监测方面，既考虑到样本的特征，还考虑到样本在已知label上的组合。 预测新样本用到了MuENLForest。</p>
+<p>MuENLForest包含g棵MuENLTree，MuENLTree是一颗二叉树，二叉树停止构建的条件C是：</p>
+<ol>
+<li>达到最大的高度</li>
+<li>剩余样本S数目为1, 即|S|=1</li>
+<li>S中的所有样本在所选属性上有相同的值</li>
+</ol>
+<p>构建流程是：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/MuENLTree.png" alt="MuENLTree"><br>可以看出在某一个叶子节点上的样本有着相似的属性(feature or label)</p>
+<p>最后是通过分到相同叶子节点上样本的属性的平均值，然后计算每个节点到该平均值的距离，最大的距离作为球(ball)的半径r，对于新来的样本，先使用建好的二叉树计算该样本落到哪个叶子节点，然后计算该样本与平均值的距离是否大于半径r，如果大于，则为新的样本。这样做的依据是，既然会落到该叶子节点，那么肯定和该节点的实例的属性有相似之处，但又落到了球之外，说明肯定在一些属性上非常不相同，也就可能为新的样本。</p>
+<h3 id="Multi-Label-Classifier-Update"><a href="#Multi-Label-Classifier-Update" class="headerlink" title="Multi-Label Classifier Update"></a>Multi-Label Classifier Update</h3><p>这个过程包括新标签分类器的构建和对原有分类器和探测器的更新。</p>
+<p>先说说新标签分类器的构建，要构建一个分类器肯定要有(x,y)，这里x不用多说，就是$X_t$，即t时刻的样本，由于是新标签，并没有完美的y来训练这个分类器，只能用探测器的结果作为y，但是探测器又不是完美的，即可能会把一些没有新标签的当做有新标签的。所以为了要更好的容忍探测器的错误，整个优化过程同时对y和训练器做同时优化。这里引入$\textbf{d}$作为$X_t$的可能性赋值(potential assignment)，其中，$\textbf{d}=[d_1,d_2,…,d_m]^T$，m为t时刻$X_t$的样本数量，使用detector的结果作为初始化，然后优化过程同时对d和优化器$w_a$做优化</p>
+<p>具体的优化公式如下所示：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/newClassifier.png" alt="newClassifier"></p>
+<p>同样是由pairwise label ranking + misclassification + regulariers组成。轮流对$d$和$w_a$做优化，优化过程如下：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/optProcess.png" alt="优化过程"></p>
+<p>上面讲到用detector的结果对$d$做初始化，同样可以用detector的结果来训练一遍分类器作为热启动来更好的收敛和获得一个更好的结果。</p>
+<p>新的标签加进来后，以往的标签可以通过与该标签做ranking来更新，具体的更新公式如下：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/update.png" alt="newClassifier"></p>
+<p>加了一个正则化项是为了防止过大的影响原先的参数。</p>
+<h3 id="Detector-Update"><a href="#Detector-Update" class="headerlink" title="Detector Update"></a>Detector Update</h3><p>这个过程就非常简单，从$X_t$中选出一些样本来重新构建MuENLTrees就好了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          
+            <a href="/tags/Multi-Label-Learning/" rel="tag"># Multi-Label Learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/" rel="next" title="Transformation Networks for Target-Oriented Sentiment Classification">
+                <i class="fa fa-chevron-left"></i> Transformation Networks for Target-Oriented Sentiment Classification
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/29/用户意图识别/" rel="prev" title="用户意图识别">
+                用户意图识别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">young</p>
+              <p class="site-description motion-element" itemprop="description">Yawen Ouyang's Blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yawenouyang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作"><span class="nav-number">3.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MUENL方法"><span class="nav-number">4.</span> <span class="nav-text">MUENL方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Multi-Label-Classifier"><span class="nav-number">4.1.</span> <span class="nav-text">The Multi-Label Classifier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#New-Label-Detection"><span class="nav-number">4.2.</span> <span class="nav-text">New Label Detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Label-Classifier-Update"><span class="nav-number">4.3.</span> <span class="nav-text">Multi-Label Classifier Update</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Detector-Update"><span class="nav-number">4.4.</span> <span class="nav-text">Detector Update</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

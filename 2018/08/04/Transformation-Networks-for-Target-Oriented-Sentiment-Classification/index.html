@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ABSA,CNN," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概述这篇论文提出了一个新的Model，该Model中的隐层更多的融合了target的信息，同时也包含了上下文信息。 文中指出虽然原始的CNN能够提取句子的局部信息，但由于一个句子中往往有多个targets，多个targets之间有不同的情感，所以效果往往不好。 文中提出的Target-Specific Transformation Networks(TNet)。不像传统的使用attention的方">
+<meta name="keywords" content="ABSA,CNN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transformation Networks for Target-Oriented Sentiment Classification">
+<meta property="og:url" content="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/index.html">
+<meta property="og:site_name" content="yOUng&#39;s Blog">
+<meta property="og:description" content="概述这篇论文提出了一个新的Model，该Model中的隐层更多的融合了target的信息，同时也包含了上下文信息。 文中指出虽然原始的CNN能够提取句子的局部信息，但由于一个句子中往往有多个targets，多个targets之间有不同的情感，所以效果往往不好。 文中提出的Target-Specific Transformation Networks(TNet)。不像传统的使用attention的方">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/model.png">
+<meta property="og:updated_time" content="2018-08-05T09:03:39.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Transformation Networks for Target-Oriented Sentiment Classification">
+<meta name="twitter:description" content="概述这篇论文提出了一个新的Model，该Model中的隐层更多的融合了target的信息，同时也包含了上下文信息。 文中指出虽然原始的CNN能够提取句子的局部信息，但由于一个句子中往往有多个targets，多个targets之间有不同的情感，所以效果往往不好。 文中提出的Target-Specific Transformation Networks(TNet)。不像传统的使用attention的方">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/model.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/"/>
+
+
+
+
+
+  <title>Transformation Networks for Target-Oriented Sentiment Classification | yOUng's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yOUng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="young">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Transformation Networks for Target-Oriented Sentiment Classification</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-04T15:17:11+08:00">
+                2018-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这篇论文提出了一个新的Model，该Model中的隐层更多的融合了target的信息，同时也包含了上下文信息。</p>
+<p>文中指出虽然原始的CNN能够提取句子的局部信息，但由于一个句子中往往有多个targets，多个targets之间有不同的情感，所以效果往往不好。</p>
+<p>文中提出的Target-Specific Transformation Networks(TNet)。不像传统的使用attention的方法来关联target信息，本文提出了一种Target-Specific Transformation(TST)机制，具体来说就是为一句话中的不同的词(或不同时刻的隐层)生成不同的target表示，并将词语该target合并，生成新的转换后的词表示(transformed word representation)。又考虑到隐层与target表示结合后会损失一部分信息，本文设计了一种上下文保留机制来对新生成的词表示更好的进行语境化(contextualize)。为了能使得CNN更好的定位到情感信息，又对CNN的输入进行了位置加权。</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/model.png" alt="model"></p>
+<p>CPT(Context-Preserving Transformation)的作用是使用特制的(tailor-made)TST来更好的巩固(consolidate)词表示和target信息。</p>
+<p>整体流程如下：</p>
+<p>使用双向LSTM为句子建模：<script type="math/tex">h_i^{(0)} = [\overrightarrow{LSTM(x_i)};\overleftarrow{LSTM(x_i)}], i \in [1,n]</script></p>
+<p>为target使用LSTM建模，这里没有使用简单的对target求平均值，是考虑到target中的每个词对整体的贡献不同：<script type="math/tex">h_j^{\tau} = [\overrightarrow{LSTM(x_j^{\tau})};\overleftarrow{LSTM(x_j^{\tau})}], j \in [1,m]</script></p>
+<p>为句子的单词的表示<script type="math/tex">h_i^{(l)}</script>，生成特定的表示：<script type="math/tex">r_i^{\tau} = \sum^m_{j=1}h^{\tau}_j*F(h^{(l)}_i,h^{\tau}_j)</script>  这里F是衡量两个向量的相关性，比如做内积然后做归一化。</p>
+<p>再将<script type="math/tex">r^{\tau}_i</script>和<script type="math/tex">h^{(l)}_i</script>和输进全连接层得到特定的词表示：<script type="math/tex">\widetilde{h}_i^{(l)}=g(W^{\tau}[h^{(l)}_i:r^{\tau}_i] + b^{\tau})</script></p>
+<p>考虑到上述操作是非线性操作，所以从BiLSTM中得到的文本信息会损失，为了更好地使用文本信息，本文引出了两种策略：Lossless Forwarding(LF)和Adaptive Scaling(AS)。</p>
+<p>LF：该策略保护的方法是直接把该TNet层的输入也作为下一层输入的一部分：<script type="math/tex">h^{(l+1)}_i = h^{(l)}_i + \widetilde{h}_i^{(l)}, i \in [1, n],l \in [0, L]</script></p>
+<p>AS：LF是直接把input和转化后的特征直接加起来，但两者并不一定是等价的，该策略解决了这一问题。即引入一个门来控制权重：<script type="math/tex">t^{(l)}_i = \phi(W_{trans}h^{(l)}_i + b_{trans})</script>, 然后再进行加权：<script type="math/tex">h^{(l+1)}_i = \widetilde{h}_i \odot t^{(l)}_i + (1-t^{(l)}_i) \odot h^{(l)}_i</script></p>
+<p>接下来就是根据句中每个词与target的距离来计算各自的权重<script type="math/tex">v_i</script>，然后与隐层相乘。<script type="math/tex">\widetilde{h}_i^{(l)}=h^{(l)}_i * v_i, i \in [1, n],l \in [1, L]</script>，注意这里对CPT每一层的结果也都会进行加权。</p>
+<p>然后对最后得到的隐层进行卷积, 得到feature map <script type="math/tex">c \in R ^{n-s+1}</script>,其中：<script type="math/tex">c_i=ReLU(w^T_{conv}h^{(L)}_{i:i+s-1}) + b_conv</script></p>
+<p>最后为了提取更明显的特征，对<script type="math/tex">n_k</script>个核得到的结果进行最大池化：<script type="math/tex">z = [max(c_i),...,max(c_{n_k})]^T</script></p>
+<p>最后把z输进全连接层进行分类。</p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>也是使用常规的准确度+Macro-Averaged F1(对样本类别分布不均衡的数据集能更好的评判)。</p>
+<p>这里超参中有一项是只使用一个卷积核尺寸在小的数据集上比用多个核尺寸效果会更好。</p>
+<p>Model在论文的一个数据集TWITTER中，表现的非常出色，主要原因是CNN能够从非语法化(ungrammatical)的句子中提取到更准确地特征，这是因为CNN旨在提取信息量最大的n-gram特征，因此对没有强序列模式的非正式文本不太敏感。这LSTM在此类句中表现的不是很好。使用dependency parsing的LSTM也因此效果更差。</p>
+<p>文中也对Ablated TNet(不知道怎么翻译)做了研究，该网络主要是去除模型的部分结构，来查看对整体的影响。其中TNet w/o context(即去除了融合context那一步)，在TWITTER数据集上无明显变化，说明这种context-preserving组件非结构文本没那么重要。</p>
+<p>实验又验证了CPT层数对实验结果的影响，发现在层数过大时，效果会非常差，这也很好解释，是因为包含过多多余的参数，训练难度增加。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ABSA/" rel="tag"># ABSA</a>
+          
+            <a href="/tags/CNN/" rel="tag"># CNN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/30/Recurrent-Attention-Network-on-Memory-for-Aspect-Sentiment-Analysis/" rel="next" title="Recurrent Attention Network on Memory for Aspect Sentiment Analysis">
+                <i class="fa fa-chevron-left"></i> Recurrent Attention Network on Memory for Aspect Sentiment Analysis
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/" rel="prev" title="Multi-Label Learning with Emerging New Labels">
+                Multi-Label Learning with Emerging New Labels <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">young</p>
+              <p class="site-description motion-element" itemprop="description">Yawen Ouyang's Blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yawenouyang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型"><span class="nav-number">2.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">3.</span> <span class="nav-text">实验</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

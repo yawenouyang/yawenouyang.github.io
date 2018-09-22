@@ -262,146 +262,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/Deep-contextualized-word-representations/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/14/Deep-contextualized-word-representations/" itemprop="url">Deep contextualized word representations</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T15:15:33+08:00">
-                2018-06-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文是NAACL2018最佳论文，提出了一个新的词向量模型ELMo(Embeddings from Language Models)，论文链接：<a href="https://arxiv.org/abs/1802.05365。" target="_blank" rel="noopener">https://arxiv.org/abs/1802.05365。</a></p>
-<p>由于词向量模型可以从大量的未标记数据中学到语法和语义信息，所以在大量的NLP任务中都会用到，但存在的问题是模型训练好后每个词的词向量是固定的，即与上下文无关(context-independent)，故也无法考虑一词在不同语境下多义的情况(polysemy)。</p>
-<p>EMLo会为不同的输入即句子，不同的任务输出不同的词向量。不同的句子输出不同的词向量好理解，考虑到不同任务对词的语法和词义的关注度不同，比如POS任务更关注词内部的语法信息(syntax)，情感分类和问答则更关注语义信息(meaning)，故不同任务输出的词向量也有不同。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>先使用两层的双向语言模型(biLM，可以用LSTM或GRU)，然后对模型隐层的状态做线性操作得到词向量。所以整个流程可以看做是半监督学习，biLM在大规模语料上训练，然后融合到特定的任务模型里。</p>
-<h3 id="Bidirectional-language-models"><a href="#Bidirectional-language-models" class="headerlink" title="Bidirectional language models"></a>Bidirectional language models</h3><p>正向时，LSTM隐层在k位置的顶层输出$\overrightarrow{h}_{k,L}^{LM}$加上softmax，即可预测下个词$t_{k+1}$的概率。</p>
-<p>反向时同理，根据LSTM隐层在k+1的位置的顶层输出$\overrightarrow{h}_{k+1,L}^{LM}$加上softmax，即可预测下个词$t_k$。</p>
-<p>最大化似然函数：</p>
-<script type="math/tex; mode=display">\sum_{k+1}^{N}{(\log_p(t_k|t_1,...,t_{k-1};\theta_x,\overrightarrow{\theta}_{LSTM},\theta_s)+\log_p(t_k|t_{k+1},...,t_N;\theta_x,\overleftarrow{\theta}_{LSTM},\theta_s))}</script><p>由上式可以看出，正向和反向共享表示($\theta_x$)和隐藏层参数($\theta_s$)。</p>
-<h3 id="ELMo"><a href="#ELMo" class="headerlink" title="ELMo"></a>ELMo</h3><p>得到各层的隐层状态后：</p>
-<script type="math/tex; mode=display">R_k=\{x_k^{LM},\overrightarrow{h}_{k,L}^{LM},\overleftarrow{h}_{k,L}^{LM}|\,j=1,...,L\}=\{h_{k,j}^{LM}|\,j=0,...,L\}</script><script type="math/tex; mode=display">ELMo_k^{task}=E(R_k;\theta^{task})=\gamma^{task}\sum_{j=0}^L{s_j^{task}h_{k,j}^{LM}}</script><p>这里$s^{task}$相当于层间的attention，由于每一层具有的信息抽象程度不同，所以可以为层之间加attention，由于${ELMo_k^{task}}$只是任务模型输入的一部分(下文会提到)，所以$\gamma$对优化也有意义。。</p>
-<h3 id="Using-biLMs-for-supervised-NLP-tasks"><a href="#Using-biLMs-for-supervised-NLP-tasks" class="headerlink" title="Using biLMs for supervised NLP tasks"></a>Using biLMs for supervised NLP tasks</h3><p>给定一个预训练好的biLM和NLP task的模型，就可以使用biLM了，输入可以是与文本无关的预训练好的词向量$x_k$或者加上些字符信息(用CNN对单词中的字母做卷积)，然后就可以把$[x_k,ELMo_k^{task}]$输进任务模型里。</p>
-<p>值得注意的是，在训练biLM(两层的LSTM)时，LSTM每一层之间也加入了残差项，输入是character-based的表示(使用CNN对词中的字母进行卷积)。</p>
-<p>这里有一点困惑预训练biLM用的输入是character-based，使用时用的输入是word embedding(+ character-based)，不会有影响吗…</p>
-<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>在6个关于语言理解(language understanding)任务上：Question answering，Textual entailment，Semantic role labeling，Coreference resolution，Name entity extraction，Sentiment analysis，加上ELMo后都达到了sota的结果。</p>
-<p>文中同样指出加入$L_2$正则化项会对结果提升有所帮助，文中取正则化权重$\lambda=1$和$\lambda=0.001$时做了几组实验进行验证。</p>
-<p>文中还指出在某些任务上，不仅把ELMo作为输入，同时在任务模型输出时把$[h_k，ELMo_k]$拼起来进行预测会更有效，比如SNLI和SQuAD任务上，但在SRL任务上又出现了下降，作者给出的解释是由于SNLI和SQuAD在biRNN(任务模型)后又加了一层attention，所以任务模型可以更好的提取biLM里的内部表示(不是太懂…)，而SRL中，与任务有关的文本表示比biLM中的表示更重要(也不是太懂…)。</p>
-<p>文中也做了几组case study：</p>
-<p>首先关于一次多义的问题，文中求得与词”play”在Glove上训练的词向量空间中与”playing”，”game”，”player”，”football”等有关运动的”play”离得最近。而biLM中得到的”play”与表达相似意思的向量离得最近。比如离”Olivia De Havilland signed to do a Broadway play for Garson”中的play最近的是”they were actors who had been handed fat roles in a successful play”中的play，两者都译为”演出”。</p>
-<p>关于Word sense disambiguation的问题，文中设计了一个实验：现在training set中对每个词的每个sense做平均得到每个sense的表示，在test set中同样用biLM得到target word的表示然后与training set中得到的所有sense作最邻近分类，判断是哪个sense，效果也不错。</p>
-<p>关于biLM是否蕴含语法信息的问题，文中直接在biLM后加了一个线性分类器，作POS任务结果也不错。</p>
-<p>文中还做实验指出，加了ELMo后，样本的参数更容易收敛(训练需要的轮数更少)，对于小的训练集(比如取0.1%，1%的训练集)能取得比一般的词向量更好的效果。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/13/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -567,7 +427,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -580,7 +440,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

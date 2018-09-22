@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="yOUng&#39;s Blog">
 <meta property="og:description" content="录用于：ICDM’15;  链接：https://ieeexplore.ieee.org/document/7373356/ 本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。 该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-31T03:00:19.233Z">
+<meta property="og:updated_time" content="2018-09-08T05:36:40.627Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Beyond Query: Interactive User Intention Understanding">
 <meta name="twitter:description" content="录用于：ICDM’15;  链接：https://ieeexplore.ieee.org/document/7373356/ 本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。 该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond">
@@ -362,10 +362,11 @@
 <script type="math/tex; mode=display">E[L] \leq \frac{(2r)^tn}{2}e^s + 1</script><p>这里：</p>
 <script type="math/tex; mode=display">r=((2-4p)\tau^2-(2-4p)\tau+1-p)</script><script type="math/tex; mode=display">s=-t/4+p(t-1)(1-p)</script><p>p为用户犯错的概率，$\tau$为Tag Matrix随机初始化为1的概率</p>
 <h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>实验对比了三个模型，Interactive Heuristic Search(IHS), Greedy, and Static Heuristic Search(SHS), SHS是一次性生成两个问题，即每两轮跟用户进行一次交互，即无论用户第一个问题如何回答，都直接问准备好的第二个问题，然后根据这两个回答继续生成下两个问题，验证的是与用户交互的重要性。</p>
-<p>选了三个数据集以问答的轮数做为评价指标，实验结果证明了IHS效果更好，比其他两个方法所需要的轮数少，更具有容错性，即在用户犯错误的概率p增大时，所需要的轮数与其他方法的轮数的差距增大。</p>
+<p>选了三个数据集(没有公开)以问答的轮数做为评价指标，实验结果证明了IHS效果更好，比其他两个方法所需要的轮数少，更具有容错性，即在用户犯错误的概率p增大时，所需要的轮数与其他方法的轮数的差距增大。</p>
 <h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>每轮交互要花很长的时间去考虑下一轮的问题，文中提出了可以用决策树来改进。</p>
 <p>没考虑到item的受欢迎程度，一般越受欢迎的item，越可能是target。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是通过一系列问答方式来判断用户意图，这里用户意图指的是某个target，而算法的目标是以尽可能少的问答轮数来从候选的item中检索到这个target。</p>
+<p>个人感觉存在的问题是没有考虑tag之间的相关性，问题的形式过于简单。</p>
 
       
     </div>
@@ -390,8 +391,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/29/用户意图识别/" rel="next" title="用户意图识别">
-                <i class="fa fa-chevron-left"></i> 用户意图识别
+              <a href="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/" rel="next" title="Multi-Label Learning with Emerging New Labels">
+                <i class="fa fa-chevron-left"></i> Multi-Label Learning with Emerging New Labels
               </a>
             
           </div>
@@ -399,6 +400,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/" rel="prev" title="Zero-shot User Intent Detection via Capsule Neural Networks">
+                Zero-shot User Intent Detection via Capsule Neural Networks <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -475,7 +480,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -488,7 +493,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

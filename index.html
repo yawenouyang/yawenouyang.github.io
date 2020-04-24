@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/24/optimizer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="young">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/" itemprop="url">Zero-shot User Intent Detection via Capsule Neural Networks</a></h1>
+                <a class="post-title-link" href="/2020/04/24/optimizer/" itemprop="url">optimizer</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-08T13:36:30+08:00">
-                2018-09-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-24T21:02:27+08:00">
+                2020-04-24
               </time>
             
 
@@ -333,37 +333,7 @@
       
         
           
-            <p>以前的工作一般都把intention detection视为分类任务，新标签的加入往往需要大量有新标签的样本来训练分类器，本文的研究重点在于在有新标签出现的时候如何使用已知标签的知识对新标签进行判别。</p>
-<p>本文的主要贡献：</p>
-<ol>
-<li>使用胶囊神经网络对文本进行建模，具体来说就是借助胶囊网络，从utterance中以分层的方式提取和融合语义信息进行建模。</li>
-<li>提出一个胶囊结构的模型对新的intent类型进行zero-shot learning(不借助额外的训练样本)。</li>
-</ol>
-<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>先进行一些概念解释。<br>Intent: Intent是潜藏在用户产生的话语(utterance)中的目的和目标。</p>
-<p>这里插一下utterance和sentence的区别(解释来自网络)，简单来说，utterance更随便一点，可以是一个词，一句话(sentence)等等，而sentence比较正式，utterance只能当做口头语，sentence可以当口头语和书面语。</p>
-<p>Intent Detection: 给定有标签的训练集{(x,y)}，x是utterance，y是一个intent label，<script type="math/tex">y \in Y = \{y_1, y_2,...,y_k\}</script>，detection的目的是为$x_{existing}$找到对应的y。</p>
-<p>Zero-shot Intent Detection: 给定有标签的训练集{(x,y)}，$y \in Y$，zero-shot intent detection是发现$x_{emerging}$的标签Z，<script type="math/tex">Z = \{z_1,z_2,...,z_L\}</script>并且$Y \cap Z = \emptyset$</p>
-<h2 id="Approach"><a href="#Approach" class="headerlink" title="Approach"></a>Approach</h2><h3 id="SemanticCaps"><a href="#SemanticCaps" class="headerlink" title="SemanticCaps"></a>SemanticCaps</h3><p>该胶囊的目的是从原始的话语(raw utterance)中提取不同的语义信息(semantic feature)，该胶囊的模型非常简单，就是双向RNN+Self Attention获得不同的self-attention的head，每个head提取一个utterance中的不同的语义(损失函数里会加一个惩罚项)，最终得到的每个semantic feature $m_r$可以视为一个胶囊。</p>
-<h3 id="DetectionCaps"><a href="#DetectionCaps" class="headerlink" title="DetectionCaps"></a>DetectionCaps</h3><p>从SemanticCaps中提取的特征都是来自utterance中低级(low level)特征，如何把这些低级特征结合成高级表示(higher-level representations)呢，传统的做法只是简单把这些低级特征拼起来或是做平均/最大池化。</p>
-<p>这里胶囊网络的优势就显现出来了，胶囊网络可以通过无监督的动态路由协议来把低级特征(semantic feature)转化为高级特征(intent representation)，DetectionCaps就是做这个工作。</p>
-<p>DetectionCaps先把semantic feature为每个意图进行编码。</p>
-<script type="math/tex; mode=display">P_{k|r} = m_rW_{k,r}</script><p>这里，<script type="math/tex">k \in \{1,2,...,K\}</script>，<script type="math/tex">r \in \{1,2,...,R\}</script>，<script type="math/tex">W_{k,r} \in R^{2D_H \times D_P}</script>，这里$p_{k|r}$相当于第r个语义特征在第k个意图中的表示。</p>
-<p>那把所有的语义特征在第k个意图的表示都加起来，就得到该样本在第k个意图上的表示：<script type="math/tex">s_k = \sum^R_r c_{kr}p_{k|r}</script>，$c_{kr}$是每个语义特征的权值，这个权值的学习就是通过刚才提到的无监督，迭代的动态路由协议方法，流程如下：<br><img src="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/dynamic_rooting.png" alt="algorithm"></p>
-<p>这里<script type="math/tex">v_k = squash(s_k)=\frac{||s_k||^2}{1+||s_k||^2} \frac{s_k}{||s_k||}</script>，这里向量$v_k$的orientation表示intent的属性，norm表示intent存在的概率。算法的其余部分都比较好理解。这里$v_k$可以视为更高级的intent capsule。</p>
-<p>Max-margin Loss:<br><img src="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/loss.png" alt="loss"></p>
-<p>这里$m^+_k$和$m^-_k$都是margin，比如可取0.9，0.1，可理解为训练过程中，要是$y=y_k$，预测的$||v_k||$值要大于0.9，要是$y\not=y_k$，预测的$||v_k||$值要小于0.1，这样loss才会尽可能小。</p>
-<p>最终的loss:</p>
-<script type="math/tex; mode=display">L_{train} = L_{existing} + \alpha||AA^T - I||^2_F</script><p>后面的正则化项是想让每个self attention提取到的head也就是semantic feature尽可能不同。</p>
-<h3 id="Zero-shot-DetectionCaps"><a href="#Zero-shot-DetectionCaps" class="headerlink" title="Zero-shot DetectionCaps"></a>Zero-shot DetectionCaps</h3><p>对于新的意向类别l，该胶囊网络是通过判断semantic feature r与存在的(existing)intent k之间关系，然后判断k与新intent l的相似度，进而判断r与l之间的关系。</p>
-<p>首先通过前两个胶囊获得<script type="math/tex">g_{k,r}=c_{kr}p_{k|r}</script>，即semantic feature r在existing intent k上的映射，</p>
-<p>判断K个存在的intent和L个新的intent的相似性$Q \in R^{L \times K}$是通过词向量计算得到的。新的intent $z_l \in Z$和以前的intent $y_k \in Y$的相似度计算如下：</p>
-<script type="math/tex; mode=display">q_{lk} = \frac{exp\{-d(e_{zl}, e_{yk})\}}{exp\{ \sum{K}{k=1}  -d(e_{zl}, e_{yk})\}}</script><p>这里</p>
-<script type="math/tex; mode=display">d(e_{zl}, e_{yk}) = (e_{zl}-e_{yk})^T \sum^{}{}^{-1}(e_{zl}-e_{yk})</script><script type="math/tex; mode=display">\sum{}{} = \phi ^ 2I</script><p>这里<script type="math/tex">\phi</script>是超参，最后semantic vector r在新的intent l上的表示为<script type="math/tex">u_{l|k}</script>，输入dynamic routing aggregation algorithm得到权值，进而得到<script type="math/tex">n_l</script>，最后选新标签中范数最大的作为类型：</p>
-<script type="math/tex; mode=display">y=argmax_{z_l \in Z} ||n_l||</script><h3 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h3><p>数据集一个用的是公用的：<a href="https://github.com/snipsco/nlu-benchmark/" target="_blank" rel="noopener">SNIPS-NLU</a>。一个没有公开。</p>
-<p>实验结果：<br><img src="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/exp1.png" alt="result"><br><img src="/2018/09/08/Zero-shot-User-Intent-Detection-via-Capsule-Neural-Networks/exp2.png" alt="result"></p>
-<p>已知intent和未知intent像是分开测的，就是说在测新标签属于哪一个类别之前，已经知道是新标签了，只需要判断是新标签中的哪一类就好了。</p>
-<p>此外本文还做了一个比较有趣的实验，是评判$var(q_l)$即第l个新标签与已知标签的相似性的方差,然后观察$var(q_l)$与其准确率的关系，得出的结论是方差大的一般效果都比较好，这也好比较理解：此时模型更加确定从哪些已知的intent来转移知识，但是对于方差小的也不见得都差，可能是依赖于一两个已知的intent(相似性非常高)，其余的相似性都很小而且很平缓。</p>
-
+            
           
         
       
@@ -411,7 +381,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/Beyond-Query-Interactive-User-Intention-Understanding/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/Zero-Shot-Learning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="young">
@@ -430,7 +400,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/29/Beyond-Query-Interactive-User-Intention-Understanding/" itemprop="url">Beyond Query: Interactive User Intention Understanding</a></h1>
+                <a class="post-title-link" href="/2018/11/02/Zero-Shot-Learning/" itemprop="url">Zero-Shot Learning</a></h1>
         
 
         <div class="post-meta">
@@ -442,8 +412,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T16:36:21+08:00">
-                2018-08-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-02T16:12:31+08:00">
+                2018-11-02
               </time>
             
 
@@ -482,481 +452,58 @@
       
         
           
-            <p>录用于：ICDM’15;  链接：<a href="https://ieeexplore.ieee.org/document/7373356/" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/7373356/</a></p>
-<p>本文的主要任务是帮助用户确认他们的目标(target)，提出了一个叫Interactive User Intention Understanding的方法。</p>
-<p>该方法通过一系列的只需要回答yes,no的问题来确定用户的目标，不需要用户的query，这也是题目称为beyond query的原因。关键点在于生成尽可能少的问题来检索到正确的目标。</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>心理学家和教育学家都认为通过问答的方式能比简单的陈述获得更精确的信息，这也好理解，所以这也是本文的动机之一，通过一系列交互式的问题帮用户确定他们的需求。</p>
-<p>本文的主要贡献有三点：</p>
+            <h1 id="Zero-Shot-Learning"><a href="#Zero-Shot-Learning" class="headerlink" title="Zero-Shot Learning"></a>Zero-Shot Learning</h1><h2 id="0-前言"><a href="#0-前言" class="headerlink" title="0 前言"></a>0 前言</h2><p>这周主要看了Zero-Shot Learning(以下简称ZSL)的一些文章，看ZSL是为了解决Intent Classification中的New Intent(Unseen)的问题，即只知道Intent Label但没有关于这个类别的训练数据。</p>
+<h2 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1 基础知识"></a>1 基础知识</h2><h3 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h3><p>有关ZSL的解释都大同小异，这里选取(可能)最早出现ZSL的paper中对其的定义”where the possible values for the class variable Y include values that have been omitted from the training examples”[1]</p>
+<h3 id="1-2-Semantic-Space"><a href="#1-2-Semantic-Space" class="headerlink" title="1.2 Semantic Space"></a>1.2 Semantic Space</h3><p>ZSL在CV上备受关注，主要原因是图像类别较多，标注困难，这里就先介绍在CV上的相关工作。</p>
+<p>总体来看，目前CV上要解决ZSL问题，都会引入Semantic Space作为外部信息，主要有三种类型的Semantic:</p>
 <ol>
-<li>生成的交互式模型不需要用户打字输入，只需要选择就好了。</li>
-<li>考虑到用户在回答的过程中会不小心打错，也提供也一些容错机制。</li>
-<li>在生成问题序列方法提供了一个新方法Interactive Heuristic Search (IHS)。</li>
+<li>Attribute space. 即每个类别的属性，属性可以有多种，比如对于一个动物来说，是否哺乳，是否有尾巴等等，那为每个类别标注属性就又变得很困难。</li>
+<li>Word vector. 直接用类别的word vector作为Semantic信息，好处是容易获得，但是信息有限。</li>
+<li>Textual description. 对类别的描述，好处也是容易获得(可以来自维基百科等)，信息较多，但信息中可能含有Noise.</li>
 </ol>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>形式化问题：</p>
+<p>有了Semantic的信息后，可以利用已知的类别学Visual Space和Semantic Space之间的映射，其中Visual Space是图片本身的特征，可用预训练好的网络来提取，维度较高，有了映射关系后，来了新样本可以先对它提取Visual feature，然后映射到Semantic space，得到Semantic feature后与所有类别的Semantic feature做KNN，即可得到所属类别。</p>
+<h2 id="2-主要问题"><a href="#2-主要问题" class="headerlink" title="2 主要问题"></a>2 主要问题</h2><p>以下主要参考了[3]</p>
+<h3 id="2-1-领域漂移问题（domain-shift-problem）"><a href="#2-1-领域漂移问题（domain-shift-problem）" class="headerlink" title="2.1 领域漂移问题（domain shift problem）"></a>2.1 领域漂移问题（domain shift problem）</h3><p>描述：同一属性(Attribute)，在不同domain的里表现出的Visual feature差异巨大，比如”有尾巴”这一属性，狐狸的尾巴和猪的尾巴就相差甚远，如果用狐狸的图片来训练Visual到Semantic的映射关系，那模型见到猪的图片时就可能会在是否有尾巴这一Semantic Feature上判断为否，进而预测错误。</p>
+<p>解决(缓解)方法：由于Visual Space的维度大于Semantic Space，所以由Visual到Semantic的映射会丢失信息，如果保留的信息越多，就能够保留更多的丰富性，就可能缓解这一问题，[4]中利用AutoEncoder的思想，采取的做法是将由Visual映射得到Semantic信息，在重新映射回去得到Visual信息，从而强迫Semantic保留更多的信息，以此来缓解这一问题。</p>
+<p><strong>回到我们的问题，Intent Label Space和Sentence Space本身都是由词表示的，空间映射这一步骤上应该会好很多，目前意图识别应用在聊天客服等任务型对话中居多，那这个聊天通常也是在同一领域内的，所以也不会有domain shift的问题，那新意图检测这个任务有没有想象中那么难，可能要重新评估一下了。</strong></p>
+<h3 id="2-2-枢纽点问题（hubness-problem）"><a href="#2-2-枢纽点问题（hubness-problem）" class="headerlink" title="2.2 枢纽点问题（hubness problem）"></a>2.2 枢纽点问题（hubness problem）</h3><p>描述：高维空间中，某些点会成为大多数点的最近邻点[4]。ZSL最终在计算时通常是使用KNN，所以会受该问题的影响。</p>
+<p>解决(缓解)方法：由于Visual Space的维度大于Semantic Space，所以映射到Semantic Space后，点与点之间更加稠密，从而加重hubness problem，反向思维一下，就把Semantic Space映射到Visual Space中即可减缓这一问题。</p>
+<h2 id="3-相关工作-持续更新"><a href="#3-相关工作-持续更新" class="headerlink" title="3 相关工作(持续更新)"></a>3 相关工作(持续更新)</h2><h3 id="3-1-缓解domain-shift-problem"><a href="#3-1-缓解domain-shift-problem" class="headerlink" title="3.1 缓解domain shift problem"></a>3.1 缓解domain shift problem</h3><p>代表论文：Semantic AutoEncoder for Zero-Shot Learning(CVPR 2017)</p>
+<p>本文主要缓解domain shift problem，其实这种方法只能通过AE的方法，使得映射到的特征保留更多信息来缓解这一问题，并不能解决。</p>
+<h3 id="3-2-借助Knowledge-Gragh"><a href="#3-2-借助Knowledge-Gragh" class="headerlink" title="3.2 借助Knowledge Gragh"></a>3.2 借助Knowledge Gragh</h3><p>上面提到Semantic Space可以是label的WordVector，而仅仅只考虑单个label的Vector信息而忽略label correlation，而correlation信息可以通过KG来表示。</p>
+<p>代表论文：</p>
+<p>Zero-shot Recognition via Semantic Embeddings and Knowledge Graphs（CVPR 2018）</p>
+<p>这里类别之间的KG通过归一化的二进制邻接矩阵$\hat{A} \in{n \times n}$来表示，n是类别数量，Graph Convolutional Network(GCN)表示为：$Z=\hat{A}X’W$，这里$X’ \in {n \times k}$是上一层的输入，最初是类别的embedding，$W \in {k \times c}$是权重矩阵，是要学习的，c是output channels，本层得到的输出$output \in {n \times c}$加个激活函数可以输入下一层。最终得到输出层是$\hat{W} \in {n \times D}$，D是分类器的参数的维度。</p>
+<p>先利用已知类别的数据去训练已知类别的分类器的，训练好后，用这些参数作为监督信息去训练GCN，最终得到未知类别的参数。</p>
+<p>Multi-Label Zero-Shot Learning with Structured Knowledge Graphs(CVPR 2018)</p>
+<p>本文中更详细的定义了label之间的关系，包括：super-subordinate(下属，通过WordNet直接得到)，positive(正相关，通过WUP[5]计算)，negative(负相关，通过WUP计算)，每种关系都对应一个函数$a_{vu}=F^k_R(w_v,w_u)$来得到两个label之间的propagation weights.关系函数和在已知类别上的分布可以通过训练集得到，测试的时候通过已知类别与未知类别的关系来得到在位未知类别上的分布。</p>
+<h3 id="3-3-生成样本"><a href="#3-3-生成样本" class="headerlink" title="3.3 生成样本"></a>3.3 生成样本</h3><p>ZSL就是没有Unseen Class的样本，随着GAN，VAE技术的兴起和成熟，大家开始用这些技术来为这些Class生成样本。</p>
+<p>代表工作：</p>
+<p>A Generative Adversarial Approach for Zero-Shot Learning from Noisy Texts(CVPR 2018)</p>
+<p>这篇主要是使用GAN来通过类别描述(来自Wikipedia)生成样本。</p>
+<p>训练过程是生成器来给文本+ $z\sim N(0,1)$建模得到semantic feature，判别器是判断输入的特征是来自文本还是图片(图片的特征可由事先训好的网络提取)，同时判别器也判断该特征是属于哪一个类别，最终要达到的目的是生成器可以通过新类别的文本来生成plausible image feature。</p>
+<p>训练时还有一个trick：通过对已知类别的visual feature降维观察，发现已知visual feature已经有较高的类内相似性和较低的类间相似性，所以想让生成的semantic feature也保证同样的特性，所以引入了Pivot Regularization，先计算每个已知类别在visual feature上的平均值作为pivot，然后使得生成的semantic feature使其与自身类别在visual space的pivot更相似。</p>
+<p>GAN训练好后，就可以为Unseen Class的生成不同semantic feature(class description + gaussian sampled $z$)，最后计算平均值得到pivot，测试样本来了之后与各个类别的pivot做KNN即可预测类别。</p>
+<p>A Generative Model For Zero Shot Learning Using Conditional Variational Autoencoders(CVPR 2018)也是同一时间段的工作，也用了类似的思想，不过是使用了Conditional VAE代替了GAN。</p>
+<h2 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h2><p>主要参考[3]</p>
+<p>(1) <a href="https://cvml.ist.ac.at/AwA/" target="_blank" rel="noopener">Animal with Attributes</a></p>
+<p>(2) <a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html" target="_blank" rel="noopener">Caltech-UCSD-Birds-200-2011（CUB）</a></p>
+<p>(3) <a href="http://groups.csail.mit.edu/vision/SUN/" target="_blank" rel="noopener">Sun database（SUN）</a></p>
+<p>(4) <a href="http://vision.cs.uiuc.edu/attributes/" target="_blank" rel="noopener">Attribute Pascal and Yahoo dataset（aPY)</a></p>
+<p>(5) ILSVRC2012/ILSVRC2010（ImNet-2）</p>
+<p>Train和Test的类别分布有两种：</p>
 <ol>
-<li>Tag Matrix. Tag矩阵引入的目的是为了表示item，Matrix <script type="math/tex">\in \{-1, 1\} ^ {n \times m}</script>，这里n是item的数量(事先给定)，m是tag的数量，tag可以是item的属性(attribute)或特征(feature)。</li>
-<li>Yes-or-No Question. 表示为$(q_i,l)$，表示出现在第i个问题中的标签q，<script type="math/tex">l \in \{-1,1\}</script>表示用户的选择yes,no。相当于在问用户要找的target中是否含有这个这个标签tag，以此来筛选候选的item。</li>
+<li>Train Class和Test Class不存在交集，即测试集中存在的都是新类别，这是一个非常强的假设，真实世界中不会存在，但能够很好地判定seen class泛化到unseen class的性能。</li>
+<li>Test Class中同样包含Train Class，比较符合真实的规律。</li>
 </ol>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h3><p>大致思路就是给每个候选item一个权重，使用向量$w^{(t)}$来表示t时刻所有item的权重，在每一轮的问答过后更新这个权重，最后根据权重做推荐。具体的，各个item的初始权重都是1，并引入一个discount factor $\gamma \in [0,1)$来减少权重，比如用户的回答中表现出了对带有tag的item不感兴趣，则对这些item的权重进行衰减，衰减后的权重为$w\gamma$。</p>
-<p>算法的整体流程为：</p>
-<h3 id="生成问题顺序策略之Greedy"><a href="#生成问题顺序策略之Greedy" class="headerlink" title="生成问题顺序策略之Greedy"></a>生成问题顺序策略之Greedy</h3><p>首先提出了最基础的贪心算法作为baseline，算法的主要思想是找到一个tag，使得$||w||_1$减少最多，由于w都是大于0的，也等价于使得所有item的权重之和减少最多。</p>
-<p>假设我们在一轮的问答中询问用户要找的target里是否含有tag q，这时所有的item可分为两类，一类是含有tag q的，即对于Tag Matrix矩阵X来说，$X_{iq}=1$，用<script type="math/tex"><w^{(t)},X_q></script>和<script type="math/tex"><w^{(t)},1-X_q></script>来表示有tag q和没有tag q的两类的权重之和，因为不确定用户会选1还是0，所以两个类中哪个类的item进行衰减并不确定，因为衰减只会发生在一个类别，而且同一类别的所有item的权重都要衰减，故总的衰减相当于一个类别的权重之和与$1-\gamma$相乘，即与一个类别的权重之和成正比，令</p>
-<script type="math/tex; mode=display">\alpha = min \{\frac{<w^{(t)},X_q>}{||w^{(t)}||_1}，\frac{<w^{(t)},1-X_q>}{||w^{(t)}||_1}\}</script><script type="math/tex; mode=display">E(q)=||w^{(t)}||_1^{-1}<w^{(t)},X_q></script><p>由于</p>
-<script type="math/tex; mode=display">\frac{1}{||w^{(t)}||_1}(<w^{(t)},X_q>+<w^{(t)},1-X_q>)=1</script><p>故最大化$\alpha$相当于最大化$min(E(q),1-E(q))$，相当于最小化$|E(q)-0.5|$，所以，也就是说找到使得$|E(q)-0.5|$最小的tag q就好了。</p>
-<script type="math/tex; mode=display">q = argmin|E(q)-0.5|</script><p>显然这种方法的局限性是只考虑一步，也就只是考虑下一个问题的生成。</p>
-<h3 id="生成问题顺序策略之Interactive-Heuristic-Search"><a href="#生成问题顺序策略之Interactive-Heuristic-Search" class="headerlink" title="生成问题顺序策略之Interactive Heuristic Search"></a>生成问题顺序策略之Interactive Heuristic Search</h3><p>该方法试着考虑下面k个问题<script type="math/tex">Q_k=\{q_1,q_2,...,q_k\}</script>，对应的用户可能输入的答案为<script type="math/tex">\textbf{l} = \{l_1l_2...l_k\} \in \{0,1\}^k</script>。</p>
-<p>在回答完第t个问题后权重，第i个item的权重$w_i$更新为</p>
-<script type="math/tex; mode=display">w_i^{(t+1)}=w_i^{(t)}\gamma^{l\oplus x_{iq_t}}</script><p>解释为用户的答案跟$x_{iq_t}$(代表第i个item是否含有第t个问题中所具有的标签)是否相同，不同则做衰减，相当于用户需要(不需要)这个标签，而这个item没有(有)这个标签，就会做衰减。</p>
-<p>因此在k轮问答后，第i个item的权重为<script type="math/tex">w_i\prod_{k}^{j=1}\gamma^{l_j\oplus x_{ij}}</script></p>
-<p>总衰减：</p>
-<script type="math/tex; mode=display">W[Q|\textbf{l}]=\sum_i w_i(1-\prod_{k}^{j=1}\gamma^{l_j\oplus x_{ij}})</script><p>由于每一个问题总会两个解，所以一个问题序列会有$2^k$个回答序列，也就会对应$2^k$衰减值，应该考虑这些衰减值中最小的，再比较所有问题序列的最小值，挑出最大的那个序列作为最优解。由于每轮都要得到用户的回答，所以称之为Interactive Heuristic Search。</p>
-<p>接下来本文又举例进行更详细的说明，这里不在赘述。</p>
-<p>关于何时停止的问题，文中假设找到正确的target item需要轮数t，此时target item出现在weight最高的前L个item里，文中证明了L的期望：</p>
-<script type="math/tex; mode=display">E[L] \leq \frac{(2r)^tn}{2}e^s + 1</script><p>这里：</p>
-<script type="math/tex; mode=display">r=((2-4p)\tau^2-(2-4p)\tau+1-p)</script><script type="math/tex; mode=display">s=-t/4+p(t-1)(1-p)</script><p>p为用户犯错的概率，$\tau$为Tag Matrix随机初始化为1的概率</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>实验对比了三个模型，Interactive Heuristic Search(IHS), Greedy, and Static Heuristic Search(SHS), SHS是一次性生成两个问题，即每两轮跟用户进行一次交互，即无论用户第一个问题如何回答，都直接问准备好的第二个问题，然后根据这两个回答继续生成下两个问题，验证的是与用户交互的重要性。</p>
-<p>选了三个数据集(没有公开)以问答的轮数做为评价指标，实验结果证明了IHS效果更好，比其他两个方法所需要的轮数少，更具有容错性，即在用户犯错误的概率p增大时，所需要的轮数与其他方法的轮数的差距增大。</p>
-<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>每轮交互要花很长的时间去考虑下一轮的问题，文中提出了可以用决策树来改进。</p>
-<p>没考虑到item的受欢迎程度，一般越受欢迎的item，越可能是target。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是通过一系列问答方式来判断用户意图，这里用户意图指的是某个target，而算法的目标是以尽可能少的问答轮数来从候选的item中检索到这个target。</p>
-<p>个人感觉存在的问题是没有考虑tag之间的相关性，问题的形式过于简单。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/" itemprop="url">Multi-Label Learning with Emerging New Labels</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-25T08:48:17+08:00">
-                2018-08-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>多标签学习任务中，一个样本往往具有多个标签，以往在多标签学习中，标签的种类是确定的，即测试集出现的标签都在训练集中出现过，无新标签的出现。</p>
-<p>然而在实际的应用中，数据流中往往伴随着新的标签，如何发现这些新标签，是本文工作的重点。本文提出的MuENL(即标题的缩写)着重解决了以下问题：对已知标签进行判别；发现新标签；对新标签重新构造同已知标签一样的分类器(classifier)。</p>
-<p>论文链接：<a href="https://ieeexplore.ieee.org/document/8305522/" target="_blank" rel="noopener">https://ieeexplore.ieee.org/document/8305522/</a></p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>在动态的环境中，样本通常以数据流(data stream)的形式到达，样本中可能混合着新标签和已知标签，而我们对样本中可能存在的新标签无任何先验知识。新样本到来后，还要及时对已学模型进行更新。</p>
-<p>本文提出的MuENL主要有三部分组成：</p>
-<ol>
-<li>构建分类器来优化成对标签排名损失(pairwise label ranking loss，后面会具体讲述该损失的作用)和对已知标签的分类。</li>
-<li>构建探测器(detector)来根据样本的input feature和预测的label attribute检测是否含有新标签。</li>
-<li>对分类器和检测器的更新程序。</li>
-</ol>
-<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>多标签学习任务中可以根据是否考虑标签之间的关系分为三大类：</p>
-<ol>
-<li>不考虑标签之间的关系， 比如为每个标签训练一个分类器。</li>
-<li>考虑两两标签之间的关系，在这个策略下，CLR把多标签分类任务转化成了成对标签排名任务。</li>
-<li>考虑所有标签之间的关系。</li>
-</ol>
-<p>这里主要讲解一下第二类，因为本文也用到了CLR(calibrated label ranking)，讲CLR之前，必须要说一下label ranking任务。</p>
-<p>label ranking的目的是对样本对应的类别标签(标签集固定)进行排序，比如样本空间X对应的标签集为{a,b,c,d}，其中一个样本x对应的标签排名是b,a,d,c。</p>
-<p>如何获得标签排名呢？主要有两个方法：pairwise comparison(RPC)和constrainy classification(CC，这里不做介绍)，RPC主要考虑两两标签之间的关系比如构建一个binary model $M_{ij}(x)$来预测x更偏向于类别i还是类别j，这种方法要构建所有标签的两两之间的关系，然后通过一个投票机制来获得与两两类别比较的结果，尽可能一致的排名结果。</p>
-<p>但RPC有一个问题，它虽然能给出标签之间的相应排名，但无法判断一个样本是否是属于某个标签，比如样本x对应的标签排名是b,a,d,c,但只能说x最像标签b，然后是a，但无法判断是不是标签b和a。</p>
-<p>CLR就解决了这个问题，CLR同时解决了多标签分类和排名问题，具体做法是如果原先样本空间X对应的标签集为{$\lambda_1$,…,$\lambda_c$}，再往里加入一个标签$\lambda_0$来作为校准标签，如果一个标签排在该标签前则视为相关标签，否则则视为不相关标签，这样就同时解决了label ranking任务和分类问题。</p>
-<h2 id="MUENL方法"><a href="#MUENL方法" class="headerlink" title="MUENL方法"></a>MUENL方法</h2><p>为了以后更方便的描述，先进行一些符号定义：<br>$X_0$是训练集中实例，$x_t$是t时刻到达的数据，$X_t$是t时刻可使用的总数据。</p>
-<p>$Y_0$是训练集中的标签，<script type="math/tex">Y_0 \in \{-1,1\}^{l \times n}</script>，$l$是标签的数量，$n$是样本的数量。</p>
-<p>函数集<script type="math/tex">\mathcal{H}_t = [h_{t,1},h_{t,2},...,h_{t,l},D_t]</script>，$h_{t,j}: \mathcal{X} -&gt; {-1,1}^l$, $D_t$是用来判别新标签。</p>
-<p>$v_t$表示的是t时刻已知的标签集。</p>
-<p>算法的整体流程为：</p>
-<p><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/algorithm.png" alt="流程"></p>
-<p>这里引入了一个buffer集，当detector预测为1的时候把样本加入到buffer集，buffer集满的时候才开始更新，为的是有足够的数据来更新分类器。但这样又有一个问题，buffer集里可能存在不同种类的新标签。论文里给的解释是：Although we have mentioned only one new label in the definition, the algorithm admits multiple new labels to emerge in the same period. In this scenario, the multiple new labels can be treated as a single meta new label for the purpose of prediction of $x_t$ and model update.</p>
-<h3 id="The-Multi-Label-Classifier"><a href="#The-Multi-Label-Classifier" class="headerlink" title="The Multi-Label Classifier"></a>The Multi-Label Classifier</h3><h3 id="New-Label-Detection"><a href="#New-Label-Detection" class="headerlink" title="New Label Detection"></a>New Label Detection</h3><p>本文在新标签监测方面，既考虑到样本的特征，还考虑到样本在已知label上的组合。 预测新样本用到了MuENLForest。</p>
-<p>MuENLForest包含g棵MuENLTree，MuENLTree是一颗二叉树，二叉树停止构建的条件C是：</p>
-<ol>
-<li>达到最大的高度</li>
-<li>剩余样本S数目为1, 即|S|=1</li>
-<li>S中的所有样本在所选属性上有相同的值</li>
-</ol>
-<p>构建流程是：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/MuENLTree.png" alt="MuENLTree"><br>可以看出在某一个叶子节点上的样本有着相似的属性(feature or label)</p>
-<p>最后是通过分到相同叶子节点上样本的属性的平均值，然后计算每个节点到该平均值的距离，最大的距离作为球(ball)的半径r，对于新来的样本，先使用建好的二叉树计算该样本落到哪个叶子节点，然后计算该样本与平均值的距离是否大于半径r，如果大于，则为新的样本。这样做的依据是，既然会落到该叶子节点，那么肯定和该节点的实例的属性有相似之处，但又落到了球之外，说明肯定在一些属性上非常不相同，也就可能为新的样本。</p>
-<h3 id="Multi-Label-Classifier-Update"><a href="#Multi-Label-Classifier-Update" class="headerlink" title="Multi-Label Classifier Update"></a>Multi-Label Classifier Update</h3><p>这个过程包括新标签分类器的构建和对原有分类器和探测器的更新。</p>
-<p>先说说新标签分类器的构建，要构建一个分类器肯定要有(x,y)，这里x不用多说，就是$X_t$，即t时刻的样本，由于是新标签，并没有完美的y来训练这个分类器，只能用探测器的结果作为y，但是探测器又不是完美的，即可能会把一些没有新标签的当做有新标签的。所以为了要更好的容忍探测器的错误，整个优化过程同时对y和训练器做同时优化。这里引入$\textbf{d}$作为$X_t$的可能性赋值(potential assignment)，其中，$\textbf{d}=[d_1,d_2,…,d_m]^T$，m为t时刻$X_t$的样本数量，使用detector的结果作为初始化，然后优化过程同时对d和优化器$w_a$做优化</p>
-<p>具体的优化公式如下所示：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/newClassifier.png" alt="newClassifier"></p>
-<p>同样是由pairwise label ranking + misclassification + regulariers组成。轮流对$d$和$w_a$做优化，优化过程如下：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/optProcess.png" alt="优化过程"></p>
-<p>上面讲到用detector的结果对$d$做初始化，同样可以用detector的结果来训练一遍分类器作为热启动来更好的收敛和获得一个更好的结果。</p>
-<p>新的标签加进来后，以往的标签可以通过与该标签做ranking来更新，具体的更新公式如下：<br><img src="/2018/08/25/Multi-Label-Learning-with-Emerging-New-Labels/update.png" alt="newClassifier"></p>
-<p>加了一个正则化项是为了防止过大的影响原先的参数。</p>
-<h3 id="Detector-Update"><a href="#Detector-Update" class="headerlink" title="Detector Update"></a>Detector Update</h3><p>这个过程就非常简单，从$X_t$中选出一些样本来重新构建MuENLTrees就好了。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/" itemprop="url">Transformation Networks for Target-Oriented Sentiment Classification</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-04T15:17:11+08:00">
-                2018-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>这篇论文提出了一个新的Model，该Model中的隐层更多的融合了target的信息，同时也包含了上下文信息。</p>
-<p>文中指出虽然原始的CNN能够提取句子的局部信息，但由于一个句子中往往有多个targets，多个targets之间有不同的情感，所以效果往往不好。</p>
-<p>文中提出的Target-Specific Transformation Networks(TNet)。不像传统的使用attention的方法来关联target信息，本文提出了一种Target-Specific Transformation(TST)机制，具体来说就是为一句话中的不同的词(或不同时刻的隐层)生成不同的target表示，并将词语该target合并，生成新的转换后的词表示(transformed word representation)。又考虑到隐层与target表示结合后会损失一部分信息，本文设计了一种上下文保留机制来对新生成的词表示更好的进行语境化(contextualize)。为了能使得CNN更好的定位到情感信息，又对CNN的输入进行了位置加权。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2018/08/04/Transformation-Networks-for-Target-Oriented-Sentiment-Classification/model.png" alt="model"></p>
-<p>CPT(Context-Preserving Transformation)的作用是使用特制的(tailor-made)TST来更好的巩固(consolidate)词表示和target信息。</p>
-<p>整体流程如下：</p>
-<p>使用双向LSTM为句子建模：<script type="math/tex">h_i^{(0)} = [\overrightarrow{LSTM(x_i)};\overleftarrow{LSTM(x_i)}], i \in [1,n]</script></p>
-<p>为target使用LSTM建模，这里没有使用简单的对target求平均值，是考虑到target中的每个词对整体的贡献不同：<script type="math/tex">h_j^{\tau} = [\overrightarrow{LSTM(x_j^{\tau})};\overleftarrow{LSTM(x_j^{\tau})}], j \in [1,m]</script></p>
-<p>为句子的单词的表示<script type="math/tex">h_i^{(l)}</script>，生成特定的表示：<script type="math/tex">r_i^{\tau} = \sum^m_{j=1}h^{\tau}_j*F(h^{(l)}_i,h^{\tau}_j)</script>  这里F是衡量两个向量的相关性，比如做内积然后做归一化。</p>
-<p>再将<script type="math/tex">r^{\tau}_i</script>和<script type="math/tex">h^{(l)}_i</script>和输进全连接层得到特定的词表示：<script type="math/tex">\widetilde{h}_i^{(l)}=g(W^{\tau}[h^{(l)}_i:r^{\tau}_i] + b^{\tau})</script></p>
-<p>考虑到上述操作是非线性操作，所以从BiLSTM中得到的文本信息会损失，为了更好地使用文本信息，本文引出了两种策略：Lossless Forwarding(LF)和Adaptive Scaling(AS)。</p>
-<p>LF：该策略保护的方法是直接把该TNet层的输入也作为下一层输入的一部分：<script type="math/tex">h^{(l+1)}_i = h^{(l)}_i + \widetilde{h}_i^{(l)}, i \in [1, n],l \in [0, L]</script></p>
-<p>AS：LF是直接把input和转化后的特征直接加起来，但两者并不一定是等价的，该策略解决了这一问题。即引入一个门来控制权重：<script type="math/tex">t^{(l)}_i = \phi(W_{trans}h^{(l)}_i + b_{trans})</script>, 然后再进行加权：<script type="math/tex">h^{(l+1)}_i = \widetilde{h}_i \odot t^{(l)}_i + (1-t^{(l)}_i) \odot h^{(l)}_i</script></p>
-<p>接下来就是根据句中每个词与target的距离来计算各自的权重<script type="math/tex">v_i</script>，然后与隐层相乘。<script type="math/tex">\widetilde{h}_i^{(l)}=h^{(l)}_i * v_i, i \in [1, n],l \in [1, L]</script>，注意这里对CPT每一层的结果也都会进行加权。</p>
-<p>然后对最后得到的隐层进行卷积, 得到feature map <script type="math/tex">c \in R ^{n-s+1}</script>,其中：<script type="math/tex">c_i=ReLU(w^T_{conv}h^{(L)}_{i:i+s-1}) + b_conv</script></p>
-<p>最后为了提取更明显的特征，对<script type="math/tex">n_k</script>个核得到的结果进行最大池化：<script type="math/tex">z = [max(c_i),...,max(c_{n_k})]^T</script></p>
-<p>最后把z输进全连接层进行分类。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>也是使用常规的准确度+Macro-Averaged F1(对样本类别分布不均衡的数据集能更好的评判)。</p>
-<p>这里超参中有一项是只使用一个卷积核尺寸在小的数据集上比用多个核尺寸效果会更好。</p>
-<p>Model在论文的一个数据集TWITTER中，表现的非常出色，主要原因是CNN能够从非语法化(ungrammatical)的句子中提取到更准确地特征，这是因为CNN旨在提取信息量最大的n-gram特征，因此对没有强序列模式的非正式文本不太敏感。这LSTM在此类句中表现的不是很好。使用dependency parsing的LSTM也因此效果更差。</p>
-<p>文中也对Ablated TNet(不知道怎么翻译)做了研究，该网络主要是去除模型的部分结构，来查看对整体的影响。其中TNet w/o context(即去除了融合context那一步)，在TWITTER数据集上无明显变化，说明这种context-preserving组件非结构文本没那么重要。</p>
-<p>实验又验证了CPT层数对实验结果的影响，发现在层数过大时，效果会非常差，这也很好解释，是因为包含过多多余的参数，训练难度增加。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/Recurrent-Attention-Network-on-Memory-for-Aspect-Sentiment-Analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/30/Recurrent-Attention-Network-on-Memory-for-Aspect-Sentiment-Analysis/" itemprop="url">Recurrent Attention Network on Memory for Aspect Sentiment Analysis</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-30T17:17:52+08:00">
-                2018-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文也是解决ABSA问题，主要亮点一是提出了multiple-attention机制来更好的获得长句中的情感特征，二是对不同时刻的隐层根据其与target的距离进行加权。</p>
-<p>multiple-attention可以更好地关注到远距离的词，对不同时刻的隐层进行加权可以使得与target近的词的权值更高，所以可以更好地关注到近距离的词。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>模型图：<br><img src="/2018/07/30/Recurrent-Attention-Network-on-Memory-for-Aspect-Sentiment-Analysis/model.png" alt="model"></p>
-<p>模型图的左下角中规中矩，就是用biLSTM对句子进行建模，得到各个时刻的隐层，这里称为memory：<script type="math/tex">M^* = \{m_1^*,...,m_T^*\}</script>，这里<script type="math/tex">m_t^* = \{\overrightarrow{h}_t^L,\overleftarrow{h}_t^L\}</script>。</p>
-<p>左上角对各个时刻的Memory做了加权，这里用到了不同时刻的Memory跟Target的距离。这里先计算与tartget的相对偏移<script type="math/tex">\mu_t = \frac{|t-\tau|}{t_{max}}</script>。权值<script type="math/tex">w_t = 1 - \frac{|t-\tau|}{t_{max}}</script>。随后更新每个时刻的memory：<script type="math/tex">m_t = (w_t · m_t^*，\mu_t)</script>。</p>
-<p>接下来就是做多次attention，然后对多次attention的结果使用卷积神经网络(这里使用GRU，因为参数更少)进行attention的更新与筛选。最后使用GRU的t时刻的隐层(论文里称作episode)<script type="math/tex">e_t</script>输进全连接层进行分类。</p>
-<p>GRU每个时刻的输入就是attention后的output：<script type="math/tex">i_t^{AL}</script>。attention的key是<script type="math/tex">g^t_j = W_t^{AL}(m_j,e_{t-1},[,\nu_r])+b^{AL}_t</script>，这里<script type="math/tex">[,\nu_r]</script>是指target的embedding的平均值，可加可不加，论文中举的例子，比如target要是一个人，就可以选择不加，<script type="math/tex">e_{t-1}</script>是上个时刻GRU的输出。然后就是对<script type="math/tex">g^t_j</script>进行softmax得到各个时刻的权值<script type="math/tex">\alpha ^t_j = \frac{exp(g^t_j)}{\sum_k exp(g^t_k)}</script>，再与各个时刻的隐层进行加权得到输入<script type="math/tex">i^{AL}_t=\sum^T_{j=1}\alpha _j^tm_j</script>。</p>
-<p>所以这里attention的key也就是当前时刻memory的隐层和上一时刻的GRU的隐层，或者再加上target向量做拼接然后再做个线性变换。query就是memory各个时刻的隐层，target和query可得到的weight，再和value，这里也是各个时刻的memory，得到最终的output，作为t时刻GRU的输入。</p>
-<p>损失函数就是交叉熵+$L_2$正则化项。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>本文选了四个数据集做实验，其中还有一个中文的数据集，是为了测试模型的语言敏感性，都得到了不错的结果。</p>
-<p><img src="/2018/07/30/Recurrent-Attention-Network-on-Memory-for-Aspect-Sentiment-Analysis/result.png" alt="result"></p>
-<p>同时为了验证Attention Layers的有效性，本文测试了5组Attention Layer的值，从1到5，1层的结果最差，说明1层attention并不能很好地提取复杂样例中的情感特征。3层左右最佳。</p>
-<p>为了验证词向量的调优，本文做了三组实验，一是随机初始化词向量，然后跟着训。二是使用训练好的，但固定。三是使用训练好的，跟着一起调优。发现固定的最好，随机初始化的最差。初始化的最差很好理解，本文也指出了会面临三个问题：(1)实验数据集太小不能够很好地调优。(2)testing data中存在很多的OOV。(3)增加过拟合的风险。要不要调优的问题，调优由于只是在训练集上进行的，如果训练集比较小，不能够涵盖测试集中的一些单词，就会破坏在原有词向量上建立起来的相似性，也会遭受过拟合风险。不调优的表现最好。</p>
+<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>类别之间的样本数量不均衡时：<br>$acc^{per-class}<em>{avg}=\frac{1}{Y}\sum^{|Y|}</em>{i=0}\frac{N^{class-i}{correct}}{N^{class-i}{total}}$</p>
+<p>均衡时：$acc^{per-image}<em>{avg}=\frac{N</em>{correct}}{N_{total}}$</p>
+<p>对于ImageNet这种类别比较多的，可采用Top K的方式，即前K个最邻近的包括正确的标签即可。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p>[1] Zero-Shot Learning with Semantic Output Codes</p>
+<p>[2] Hubness and Pollution: Delving into Class-Space Mapping for Zero-Shot Learning.</p>
+<p>[3] <a href="https://zhuanlan.zhihu.com/p/34656727" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/34656727</a></p>
+<p>[4] Hubness and Pollution: Delving into Class-Space Mapping for Zero-Shot Learning.</p>
+<p>[5] Verbs semantics and lexical selection.</p>
 
           
         
@@ -1225,7 +772,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/16/论文札记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/13/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="young">
@@ -1244,7 +791,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/16/论文札记/" itemprop="url">论文札记</a></h1>
+                <a class="post-title-link" href="/2018/06/13/hello-world/" itemprop="url">Hello World</a></h1>
         
 
         <div class="post-meta">
@@ -1256,8 +803,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-16T09:24:02+08:00">
-                2018-07-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-13T19:49:43+08:00">
+                2018-06-13
               </time>
             
 
@@ -1296,495 +843,15 @@
       
         
           
-            <p>有的论文读完，受用的地方不多，不足以写成论文笔记，就集中记录于此。</p>
-<p>Title: Exploiting Document Knowledge for Aspect-level Sentiment Classification</p>
-<p>概述: 主要是解决Aspect-level的情感分类问题，引入Document-level的进行辅助。</p>
-<p>总结:</p>
-<ol>
-<li>解决Aspect-level问题时，使用的是LSTM+ATT模型，是为了方便opinion target(aspect term)更方便注意到opinion word，这也是sota的做法。需要注意的是使用opinion word的平均词向量(opinion word可以多个词，比如: service quality)作为ATT中的key。</li>
-<li>引入Document-level时，使用了MTL的方法，但loss function是两任务损失函数的加权和，需要注意的是，这两个任务的数据集完全不同，所以对于任意一个数据集都无法同时计算两个loss，向师兄请教后，一种解决方法是对于一组batch，可以输入两个数据集的混合，分别计算两者的loss，再加权，个人觉得，这样做跟使用两个损失函数，使用不同学习率差别不大…</li>
-<li>作者还通过加入不同比例的document-level的数据，来观察aspect-level的准确率的变化，这种实验方法也需要学习一下。</li>
-</ol>
-<p>Title: Aspect Based Sentiment Analysis with Gated Convolutional Networks</p>
-<p>这篇文章也是讲ABSA的，有几个有趣的地方，在此记录下来。</p>
-<p>文章首先指出，关于ABSA的可以分为两类：</p>
-<ol>
-<li>aspect-category sentiment analysis(ACSA)：category提前给定</li>
-<li>aspect-term sentiment analysis(ATSA): term指文中出现的</li>
-</ol>
-<p>个人理解是ACSA，在category给定的情况下就可以给每个category初始化aspect embedding，一起训就好了，term word更加不确定性，所以要训练一个模型对term进行编码。</p>
-<p>而以前解决ABSA的方法都是通过LSTM+Attention，缺点是模型复杂和训练时间更长，本文提出的CNN+gating mechanism可以更有效率(更好的并行化)，并且更有效。</p>
-<p>ACSA模型：<br><img src="/2018/07/16/论文札记/model.png" alt="model"><br>可以看出对每个位置t，有两次卷积的过程：</p>
-<script type="math/tex; mode=display">a_i=relu(X_{i:i+k} * W_a + V_av_a + b_a)</script><script type="math/tex; mode=display">s_i=tanh(X_{i:i+k} * W_s + b_s)</script><script type="math/tex; mode=display">c_i = s_i \times a_i</script><p>$a_i$负责定位到与aspect相关的区域，$s_i$负责提取这一区域的情感信息。</p>
-<p>与ACSA不同的是，ATSA使用CNN对term做卷积(aspect term可能不止一个单词)来替代aspect Embedding。</p>
-<p>Title: Attention Modeling for Targeted Sentiment</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/11/迁移学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/11/迁移学习/" itemprop="url">迁移学习</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-11T14:49:51+08:00">
-                2018-07-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文是阅读王晋东发布的<a href="https://github.com/jindongwang/transferlearning" target="_blank" rel="noopener">迁移学习手册</a>的记录与思考。</p>
-<h1 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h1><p>迁移学习，是利用数据、任务、或模型之间的相似性，将在旧领域学习过的模型，应用于新领域的一种学习过程。</p>
-<p>形式化定义：给定一个有标记的源域<script type="math/tex">D_s=\{x_i, y_i\}^n_{i=1}</script>，和一个无标签的目标域<script type="math/tex">{D_t=\{x_j\}^{n+m}_{j=n+1}}</script>，这两个领域的数据分布不同$P(x_s)$和$P(x_t)$不同，借助$D_s$的知识，来学习目标域$D_t$的标签。</p>
-<p>其中比较热门的一个研究方便，领域自适应(Domain Adaption)中，强调特征空间相同$\mathcal{X}_s=\mathcal{X}_t$，类别空间也相同，即$\mathcal{Y}_s=\mathcal{Y}_t$，但边缘分布不同，$P_s(x_s)\not=P_t(x_t)$，条件概率分布也不同，$Q_s(y_s|x_s)\not=Q_t(y_t|x_t)$，学习的目标是学到一个分类器$f:x_t -&gt; y_t$来预测目标域$D_t$的标签$y_t \in \mathcal{Y}_t$。</p>
-<h2 id="问题与解决"><a href="#问题与解决" class="headerlink" title="问题与解决"></a>问题与解决</h2><p>为什么要引入迁移学习，迁移学习可解决哪些问题？</p>
-<ol>
-<li>大数据与少标注：迁移数据标注</li>
-<li>大数据与弱计算：模型迁移</li>
-<li>普适化模型与个性化需求：自使用学习</li>
-<li>特定应用的需求：相似领域知识迁移</li>
-</ol>
-<h1 id="2-分类"><a href="#2-分类" class="headerlink" title="2. 分类"></a>2. 分类</h1><p>依据的分类准则不同，分类结果也不同</p>
-<h2 id="按目标域标签分"><a href="#按目标域标签分" class="headerlink" title="按目标域标签分"></a>按目标域标签分</h2><ol>
-<li>监督迁移学习</li>
-<li>半监督迁移学习</li>
-<li>无监督迁移学习</li>
-</ol>
-<h2 id="按学习方法分"><a href="#按学习方法分" class="headerlink" title="按学习方法分"></a>按学习方法分</h2><ol>
-<li>基于样本的迁移：通过对要迁移的样本进行赋予权重，相似的样本权重高。</li>
-<li>基于特征的迁移：源域和目标域的特征不在一个空间，或者所在的空间不相似，那么就迁移到一个空间里。</li>
-<li>基于模型的迁移：构建参数共享的模型。</li>
-<li>基于关系的迁移：挖掘和利用关系进行类比迁移。</li>
-</ol>
-<h2 id="按特征分"><a href="#按特征分" class="headerlink" title="按特征分"></a>按特征分</h2><ol>
-<li>同构迁移学习：特征语义和维度都相同</li>
-<li>异构迁移学习：特征完全不同</li>
-</ol>
-<p>比如不同图片的迁移，是同构，图片到文本，是异构。</p>
-<h2 id="按离线与在线分"><a href="#按离线与在线分" class="headerlink" title="按离线与在线分"></a>按离线与在线分</h2><ol>
-<li>离线迁移学习：源域和目标域是给定的，仅迁移一次，缺点就是无法对新加入的数据进行学习，模型也得不到更新。</li>
-<li>在线迁移学习：随意数据的动态加入，算法也在不断更新。</li>
-</ol>
-<h1 id="3-应用"><a href="#3-应用" class="headerlink" title="3. 应用"></a>3. 应用</h1><p>略</p>
-<h1 id="4-基础知识"><a href="#4-基础知识" class="headerlink" title="4. 基础知识"></a>4. 基础知识</h1><p>有两个基本概念：领域(Domain)和任务(Task)</p>
-<h2 id="领域"><a href="#领域" class="headerlink" title="领域"></a>领域</h2><p>领域($D$)：学习的主体，主要由两部分组成：数据和生成数据的概率分布($P$)。</p>
-<p>涉及到迁移，故包含源领域(Source Domain)和目标领域(Target Domain)。</p>
-<p>源领域：有知识，有大量数据标注，是要迁移的对象。<br>目标领域：最终要赋予知识、赋予标注的对象。</p>
-<p>领域上的数据用小写$x$表示，第i个样本或特征即$x_i$，用大写$X$表示一个领域的数据，用花体$\mathcal{X}$来表示特征空间，概率分布$P$只是一个逻辑上的概念，一般认为不同domain有着不同的概率分布。</p>
-<h2 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h2><p>任务也就是要学习的目标，主要由标签$\mathcal{Y}$和标签对应的函数$f(·)$组成，源领域和目标领域的类别空间就可由$\mathcal{Y}_s$和$\mathcal{Y}_t$表示，小写的$y_s$和$y_t$表示源领域和目标领域的实际类别。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>度量和利用领域间的相似性。</p>
-<h2 id="度量准则"><a href="#度量准则" class="headerlink" title="度量准则"></a>度量准则</h2><ol>
-<li>向量距离：欧氏距离，闵可夫斯基距离，马氏距离度量点(向量)之间的距离</li>
-<li>分布距离：KL散度(非对称)，JS距离(对称)</li>
-<li>向量相似度：余弦相似度衡量向量</li>
-<li>概率分布相似度：互信息，皮尔逊相关系数衡量概率分布</li>
-<li>集合相似度：Jaccard系数衡量集合</li>
-<li>最大均值差异MMD：映射到再生希尔伯特空间后，再求两个分布的距离。</li>
-<li>Principle Angle：将分布映射到高维空间后形成两个点，求这两个点各个维度的夹角和。</li>
-<li>A-distance: 训练模型来区分数据来自源域或目标域，通常用于计算两个领域的相似性程度。</li>
-<li>希尔伯特-施密特独立性系数：验证两组数据的独立性。</li>
-</ol>
-<h1 id="5-迁移学习的基本方法"><a href="#5-迁移学习的基本方法" class="headerlink" title="5. 迁移学习的基本方法"></a>5. 迁移学习的基本方法</h1><h2 id="基于样本迁移"><a href="#基于样本迁移" class="headerlink" title="基于样本迁移"></a>基于样本迁移</h2><p>根据一定的权重生成规则，对数据样本进行重用，提高有利于目标分类任务的实例权重，降低不利于目标分类任务的实例权重。判断是否有利可以通过对$P(x_t)/P(x_s)$的比值进行估计。</p>
-<p>假设：源域和目标域的概率分不同且未知($P(X_s)\not=P(x_t)$)</p>
-<p>优点：有较好的理论支撑，容易推导泛化误差上界。</p>
-<p>缺点：只在领域间分布差异较小时有效。</p>
-<h2 id="基于特征迁移"><a href="#基于特征迁移" class="headerlink" title="基于特征迁移"></a>基于特征迁移</h2><p>将源域和目标域的数据特征变化到统一的特征空间中。</p>
-<p>假设：源域和目标域间有一些交叉特征。</p>
-<h2 id="基于模型迁移"><a href="#基于模型迁移" class="headerlink" title="基于模型迁移"></a>基于模型迁移</h2><p>从源域和目标域中找到共享的参数信息。</p>
-<p>假设：源域中的数据和目标域中的数据可以共享一些模型的参数。</p>
-<h2 id="基于关系迁移"><a href="#基于关系迁移" class="headerlink" title="基于关系迁移"></a>基于关系迁移</h2><p>主要关注源域和目标域的样本之间的关系。</p>
-<h1 id="6-数据分布自适应"><a href="#6-数据分布自适应" class="headerlink" title="6. 数据分布自适应"></a>6. 数据分布自适应</h1><p>本章开始介绍迁移学习的方法，基本思想是，源域和目标域数据的概率分布不同，通过变换，将数据分布的距离拉近。</p>
-<h2 id="边缘分布自适应"><a href="#边缘分布自适应" class="headerlink" title="边缘分布自适应"></a>边缘分布自适应</h2><p>减小源域和目标域的边缘概率分布的距离，如图所示。<br><img src="/2018/07/11/迁移学习/边缘分布自适应.png" alt="边缘分布自适应"></p>
-<p>最早的解决方法是迁移成分分析(Transfer Component Analysis)，使得$P(\phi(x_s)) \approx P(\phi(x_t))$，TCA假设如果两者边缘分布接近，那条件分布也会接近$P(y_s|\phi(x_s)) \approx P(y_t|\phi(x_t))$，即关键点就是找到这个$\phi$。</p>
-<p>$\phi$是无法通过遍历找到的最合适的，直接计算两个分布的MMD，把映射转化成核函数，通过引入核矩阵$K$和计算MMD矩阵$L$，计算中心矩阵$H$来维持数据特征，所以问题的就转化为了选择核函数(线性核和高斯核)计算$K$，然后求得源域和目标域的降维后的数据，然后就可以使用传统机器学习方法了。</p>
-<p>具体参考：<a href="https://ieeexplore.ieee.org/abstract/document/5640675/" target="_blank" rel="noopener">https://ieeexplore.ieee.org/abstract/document/5640675/</a></p>
-<h2 id="条件分布自适应"><a href="#条件分布自适应" class="headerlink" title="条件分布自适应"></a>条件分布自适应</h2><p>减少源域和目标域的条件概率分布的距离，从而完成迁移学习。</p>
-<p>具体参考：<a href="https://arxiv.org/pdf/1801.00820" target="_blank" rel="noopener">https://arxiv.org/pdf/1801.00820</a></p>
-<h2 id="联合分布自适应"><a href="#联合分布自适应" class="headerlink" title="联合分布自适应"></a>联合分布自适应</h2><p>同时缩小条件分布和边缘分布。</p>
-<p>联合分布适配JDA是寻找一个变换$A$，使得经过变化后的$P(A^Tx_s)$和$P(A^Tx_t)$的距离能够尽可能接近，同时$P(y_s|A^Tx_s)$和$P(y_t|A^Tx_t)$的距离也要小。</p>
-<p>具体参考：<a href="http://ise.thss.tsinghua.edu.cn/~mlong/doc/joint-distribution-adaptation-iccv13.pdf" target="_blank" rel="noopener">http://ise.thss.tsinghua.edu.cn/~mlong/doc/joint-distribution-adaptation-iccv13.pdf</a></p>
-<h1 id="7-第二类方法：特征选择"><a href="#7-第二类方法：特征选择" class="headerlink" title="7. 第二类方法：特征选择"></a>7. 第二类方法：特征选择</h1><p>基本假设：源域和目标域中均含有一部分公共特征，在这部分公共特征上，源领域和目标领域的数据分布式一致的。</p>
-<p>其中比较经典的一个的方法是SCL(Structural Correspondence Learning),该方法的目标是找到两个领域的公共特征，这里称作pivot feature，轴特征在文本分类中指不同领域中共频比较高的词。</p>
-<p>具体参考：<a href="http://john.blitzer.com/papers/emnlp06.pdf" target="_blank" rel="noopener">http://john.blitzer.com/papers/emnlp06.pdf</a></p>
-<h1 id="8-第三类方法：子空间学习"><a href="#8-第三类方法：子空间学习" class="headerlink" title="8. 第三类方法：子空间学习"></a>8. 第三类方法：子空间学习</h1><p>子空间学习通常假设源域和目标域在变换后的子空间有着相似的分布，根据特征变化的形式，可以将子空间学习分为：基于统计特征变化的统计特征对齐方法和基于流形变化的流形学习方法。</p>
-<h2 id="统计特征"><a href="#统计特征" class="headerlink" title="统计特征"></a>统计特征</h2><p>将数据的统计特征进行对其变化，然后对对齐后的数据使用ML方法学习。</p>
-<p>SA方法(Subspace Alignment，子空间对齐)是借助M实现对齐：<br>$F(M)=||X_sM-X_t||^2_F$</p>
-<p>具体参考：<a href="https://pdfs.semanticscholar.org/75ff/d8ec52350e9b3c96e07c1c0f63c92370a3cb.pdf" target="_blank" rel="noopener">https://pdfs.semanticscholar.org/75ff/d8ec52350e9b3c96e07c1c0f63c92370a3cb.pdf</a></p>
-<h2 id="流形学习"><a href="#流形学习" class="headerlink" title="流形学习"></a>流形学习</h2><p>有待了解。</p>
-<h1 id="9-深度迁移学习"><a href="#9-深度迁移学习" class="headerlink" title="9. 深度迁移学习"></a>9. 深度迁移学习</h1><p>深度网络的finetune可以帮助我们节省训练时间，提高精度，但无法处理训练数据(源数据)和测试数据(目标数据)分布不同的情况，引入自适应层(Adaptation Layer)来使得源域和目标域数据更接近。</p>
-<p>绝大多数深度迁移学习方法采用了以下的损失定义方式：$\mathcal{l}=\mathcal{l}_c(\mathcal{D}_s, y_s)+\lambda\mathcal{l}_A(\mathcal{D}_s, \mathcal{D}_t)$，这里$\mathcal{l}_c(\mathcal{D}_s, y_s)$表示常规分类损失，$\lambda\mathcal{l}_A(\mathcal{D}_s, \mathcal{D}_t)$表示自适应损失。</p>
-<p>1.第一个方法：DDC(Deep Domain Confusion)，来解决自适应问题。损失函数和模型：<br><img src="/2018/07/11/迁移学习/DDC.png" alt="DDC"></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/" itemprop="url">Learning Domain Representation for Multi-Domain Sentiment Classification</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-10T21:01:50+08:00">
-                2018-07-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文主要是解决多领域中的情感分类问题，跟大多数多任务学习类似，这篇文章提出的模型也是不同领域共享(domain-general)Bi-LSTM生成的文本表示，在把通用的文本表示转化成domain-specific时引入了domain descriptor来做attention，为了更好地利用training data又加入了Memory Network。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p><img src="/2018/07/10/Learning-Domain-Representation-for-Multi-Domain-Sentiment-Classification/mtl.png" alt="model"><br>生成domain-specific的文本表示$I^i_j$(第i个domain的第j个样本)时，各个时刻上的权重即attention是使用additive attention的方式，key是第i个domain的domain descriptor $N_i$，本文为了强调各个domain之间的关系，各个domain descriptor之间做了self attention：$N_i^{new}=N softmax(N^TN_i)$</p>
-<p>为了更好地使用training data，把training data加到了Memory Network中，对于第i个domain的Memory，把第j个训练样本设置为第j列：$M^i_j = I^i_j$，在使用时得到输入$I^i_j$后，通过dot product attention来求得文本向量$C^i_j = M^isoftmax((M^i)^TI^i_j)$，然后把context vector和domain specific拼起来进行预测。</p>
-<p>这里memory size $|M^i|$等于训练样本的数目，可能会非常大，这里文中提出了两种压缩memory size的策略。第一种是令$|M^i|=|V|$，即Memory Network的每一列表示一个单词，对于训练数据$I^i_j$只更新输入序列$s^i_j$中包含的单词的对应列：$M^i_w = decay*M^i_w + (1-decay)I^i_j$。第二种是先固定$|M^i|$，然后$I^i_j$只更新列中与其最相似的那一列，即$argmax(M^i)^TI^i_j$，这样的话类似情感的输入进行了聚类，来更新相同的一列。</p>
-<p>模型的右上角加了一个对抗训练，论文中给的解释看不太懂，这里是又显示使用了一遍domain信息进行训练。</p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>在in-domain和cross-domain两方面验证模型的有效性，in-domain就是test data在m个training domain里，cross-domain就是test data来自unknown domain。</p>
-<p>由于数据集非常均衡，所以这里验证指标只使用了Accuracy。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文提出用self-attention来加强各个domain之间的关联，使用Memory来更显示的使用训练数据，引入对抗训练来强调domain信息，这些做法值得借鉴。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/Deep-contextualized-word-representations/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="young">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="yOUng's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/14/Deep-contextualized-word-representations/" itemprop="url">Deep contextualized word representations</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T15:15:33+08:00">
-                2018-06-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文是NAACL2018最佳论文，提出了一个新的词向量模型ELMo(Embeddings from Language Models)，论文链接：<a href="https://arxiv.org/abs/1802.05365。" target="_blank" rel="noopener">https://arxiv.org/abs/1802.05365。</a></p>
-<p>由于词向量模型可以从大量的未标记数据中学到语法和语义信息，所以在大量的NLP任务中都会用到，但存在的问题是模型训练好后每个词的词向量是固定的，即与上下文无关(context-independent)，故也无法考虑一词在不同语境下多义的情况(polysemy)。</p>
-<p>EMLo会为不同的输入即句子，不同的任务输出不同的词向量。不同的句子输出不同的词向量好理解，考虑到不同任务对词的语法和词义的关注度不同，比如POS任务更关注词内部的语法信息(syntax)，情感分类和问答则更关注语义信息(meaning)，故不同任务输出的词向量也有不同。</p>
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>先使用两层的双向语言模型(biLM，可以用LSTM或GRU)，然后对模型隐层的状态做线性操作得到词向量。所以整个流程可以看做是半监督学习，biLM在大规模语料上训练，然后融合到特定的任务模型里。</p>
-<h3 id="Bidirectional-language-models"><a href="#Bidirectional-language-models" class="headerlink" title="Bidirectional language models"></a>Bidirectional language models</h3><p>正向时，LSTM隐层在k位置的顶层输出$\overrightarrow{h}_{k,L}^{LM}$加上softmax，即可预测下个词$t_{k+1}$的概率。</p>
-<p>反向时同理，根据LSTM隐层在k+1的位置的顶层输出$\overrightarrow{h}_{k+1,L}^{LM}$加上softmax，即可预测下个词$t_k$。</p>
-<p>最大化似然函数：</p>
-<script type="math/tex; mode=display">\sum_{k+1}^{N}{(\log_p(t_k|t_1,...,t_{k-1};\theta_x,\overrightarrow{\theta}_{LSTM},\theta_s)+\log_p(t_k|t_{k+1},...,t_N;\theta_x,\overleftarrow{\theta}_{LSTM},\theta_s))}</script><p>由上式可以看出，正向和反向共享表示($\theta_x$)和隐藏层参数($\theta_s$)。</p>
-<h3 id="ELMo"><a href="#ELMo" class="headerlink" title="ELMo"></a>ELMo</h3><p>得到各层的隐层状态后：</p>
-<script type="math/tex; mode=display">R_k=\{x_k^{LM},\overrightarrow{h}_{k,L}^{LM},\overleftarrow{h}_{k,L}^{LM}|\,j=1,...,L\}=\{h_{k,j}^{LM}|\,j=0,...,L\}</script><script type="math/tex; mode=display">ELMo_k^{task}=E(R_k;\theta^{task})=\gamma^{task}\sum_{j=0}^L{s_j^{task}h_{k,j}^{LM}}</script><p>这里$s^{task}$相当于层间的attention，由于每一层具有的信息抽象程度不同，所以可以为层之间加attention，由于${ELMo_k^{task}}$只是任务模型输入的一部分(下文会提到)，所以$\gamma$对优化也有意义。。</p>
-<h3 id="Using-biLMs-for-supervised-NLP-tasks"><a href="#Using-biLMs-for-supervised-NLP-tasks" class="headerlink" title="Using biLMs for supervised NLP tasks"></a>Using biLMs for supervised NLP tasks</h3><p>给定一个预训练好的biLM和NLP task的模型，就可以使用biLM了，输入可以是与文本无关的预训练好的词向量$x_k$或者加上些字符信息(用CNN对单词中的字母做卷积)，然后就可以把$[x_k,ELMo_k^{task}]$输进任务模型里。</p>
-<p>值得注意的是，在训练biLM(两层的LSTM)时，LSTM每一层之间也加入了残差项，输入是character-based的表示(使用CNN对词中的字母进行卷积)。</p>
-<p>这里有一点困惑预训练biLM用的输入是character-based，使用时用的输入是word embedding(+ character-based)，不会有影响吗…</p>
-<h2 id="评估"><a href="#评估" class="headerlink" title="评估"></a>评估</h2><p>在6个关于语言理解(language understanding)任务上：Question answering，Textual entailment，Semantic role labeling，Coreference resolution，Name entity extraction，Sentiment analysis，加上ELMo后都达到了sota的结果。</p>
-<p>文中同样指出加入$L_2$正则化项会对结果提升有所帮助，文中取正则化权重$\lambda=1$和$\lambda=0.001$时做了几组实验进行验证。</p>
-<p>文中还指出在某些任务上，不仅把ELMo作为输入，同时在任务模型输出时把$[h_k，ELMo_k]$拼起来进行预测会更有效，比如SNLI和SQuAD任务上，但在SRL任务上又出现了下降，作者给出的解释是由于SNLI和SQuAD在biRNN(任务模型)后又加了一层attention，所以任务模型可以更好的提取biLM里的内部表示(不是太懂…)，而SRL中，与任务有关的文本表示比biLM中的表示更重要(也不是太懂…)。</p>
-<p>文中也做了几组case study：</p>
-<p>首先关于一次多义的问题，文中求得与词”play”在Glove上训练的词向量空间中与”playing”，”game”，”player”，”football”等有关运动的”play”离得最近。而biLM中得到的”play”与表达相似意思的向量离得最近。比如离”Olivia De Havilland signed to do a Broadway play for Garson”中的play最近的是”they were actors who had been handed fat roles in a successful play”中的play，两者都译为”演出”。</p>
-<p>关于Word sense disambiguation的问题，文中设计了一个实验：现在training set中对每个词的每个sense做平均得到每个sense的表示，在test set中同样用biLM得到target word的表示然后与training set中得到的所有sense作最邻近分类，判断是哪个sense，效果也不错。</p>
-<p>关于biLM是否蕴含语法信息的问题，文中直接在biLM后加了一个线性分类器，作POS任务结果也不错。</p>
-<p>文中还做实验指出，加了ELMo后，样本的参数更容易收敛(训练需要的轮数更少)，对于小的训练集(比如取0.1%，1%的训练集)能取得比一般的词向量更好的效果。</p>
+            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
           
         
@@ -1823,10 +890,6 @@
   </section>
 
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
 
 
           </div>
@@ -1870,7 +933,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1883,7 +946,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1930,7 +993,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

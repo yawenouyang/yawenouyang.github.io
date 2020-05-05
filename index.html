@@ -333,7 +333,47 @@
       
         
           
-            
+            <p>本文记录了一些常见的优化器，只有大概，很多地方理解还不到位。</p>
+<h2 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h2><p>梯度下降(Gradient Descent)包括三类：批量梯度下降(full-batch gradient descent, 有时也称为batch gradient descent)，随机梯度下降(stochastic gradient descent)，小批量梯度下降(mini-batch gradient descent)。</p>
+<p>以目标函数$J(\theta) = \sum^m_{i=1} J(\theta;x^{(i)}, y^{(i)})$为例，其中$m$为样本个数</p>
+<h3 id="full-batch-GD"><a href="#full-batch-GD" class="headerlink" title="full-batch GD"></a>full-batch GD</h3><p>每次更新权重需要用到所有的样本，也就是直接用$J(\theta)$对$\theta$求偏导。更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta)</script><p>优点：由于直接优化的是目标函数$J(x)$，所以对于凸优化问题，肯定能达到最优解，对于非凸，肯定能到达极值点。在样本量不大时，收敛也很快。</p>
+<p>缺点：样本很多时，更新一次要很久，样本需要实时加入(on-the-fly)时，也不能用。</p>
+<h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>每次更新只用到了一个样本，更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta;x^{(i)}, y^{(i)})</script><p>优点：对于$m$个样本中相同或相似的样本，梯度也相似，full-batch则进行了冗余的计算，SGD直觉上会更省时。理论上也可以证明，[1]证明了在样本数量足够多时，SGD的计算复杂度更低(达到误差小于$\epsilon$的目标，需要求梯度的次数)：SGD：$O(\frac{1}{\epsilon})$，full-batch GD：$O(nlog(\frac{1}{\epsilon}))$。</p>
+<p>缺点：SGD的波动性很强，因此可能会跳出极值点，但收敛会更难一些。</p>
+<h3 id="mini-batch-GD"><a href="#mini-batch-GD" class="headerlink" title="mini-batch GD"></a>mini-batch GD</h3><p>用部分样本$n$近似全部，更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta; x^{i:i+n}, y^{i:i+n})</script><p>综合了GD和SGD的特点，更稳定收敛的同时，又能够更高效的计算(目前深度学习库可以更好地并行)。</p>
+<p>$\textbf{以上缺点}:$ 所有参数都使用的是相同的学习率，对于稀疏的特征，我们学习率想更大一些，梯度下降往往做不到。</p>
+<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>Momentum通过累计梯度的方式来加快训练速度，或是跳出极值点：</p>
+<script type="math/tex; mode=display">
+v_t = \gamma v_{t-1} + \eta\nabla_\theta J(\theta) \\
+\theta = \theta - v_t</script><p>不同参数的学习率仍相同。</p>
+<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><p>使历史的梯度影响参数的学习率，达到历史梯度越大的参数的学习率越小，历史梯度越小的参数的学习率越大，对于$\theta<em>i$，$t$时刻的$J(\theta)$对其的偏导记为$g</em>{t,i}$:</p>
+<script type="math/tex; mode=display">
+n_{t,i} = n_{t,i} + g_{t,i}^2 \\
+\theta_{t,i} = \theta_{t,i} - \frac{\eta}{\sqrt{n_{t,i}} +  \epsilon} g_{t,i}</script><p>其中$\alpha$是新的学习率，$\eta$是全局学习率，$\epsilon$是防止分母为0</p>
+<p>特点：学习率跟梯度相关：在较平缓的地方会获得更大的学习率，在较陡峭的地方会降低学习率。但由于$n_t$是递增，这会导致学习率最后会非常低。</p>
+<h2 id="Adadelta"><a href="#Adadelta" class="headerlink" title="Adadelta"></a>Adadelta</h2><p>修改了$n_t$的计算：</p>
+<script type="math/tex; mode=display">
+n_{t,i} = \gamma n_{t,i} + (1-\gamma)g_{t,i}^2</script><p>这里其实$n<em>{t,i}$想表示的是$g</em>{t,i}^2$的期望，RMSProp亦是如此，两者几乎同时提出。</p>
+<p>主要优点：RMSprop和Adadelta在non-stationary(非平稳)设置下会更适合，所谓非平稳是指优化函数会发生变化(可能更适合多任务学习？)，这里还不能太理解原因。</p>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>Momentum和RMSProp的结合：</p>
+<script type="math/tex; mode=display">
+v_{t,i} = \beta_1 v_{t-1,i} + (1-\beta_1)g_{t,i} \\
+n_{t,i} = \beta_2 n_{t,i} + (1-\beta_2)g_{t,i}^2</script><p>Adam又指出这里$v<em>{t,i}，n</em>{t,i}$并不能代表$g<em>{t,i}，g</em>{t,i}^2$的期望，作者进行了校准：</p>
+<script type="math/tex; mode=display">
+\hat{v_{t,i}} = \frac{v_{t,i}}{1-\beta_1^t}
+\\
+\hat{n_{t,i}} = \frac{n_{t,i}}{1-\beta_2^t}</script><p>最后进行参数更新：</p>
+<script type="math/tex; mode=display">
+\theta_{t,i} = \theta_{t,i} - \frac{\eta}{\sqrt{\hat{n_{t,i}}} +  \epsilon} \hat{v_{t,i}}</script><p>论文中的参考文献指出RMSprop+动量也有相关工作，Adam与它们的不同是使用动量的方式不同，Adam另外还进行了bias操作。</p>
+<p>主要优点：结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点。</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>[1] Optimization Methods for Large-Scale Machine Learning<br>[2] <a href="https://zhuanlan.zhihu.com/p/28060786" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28060786</a><br>[3] <a href="https://ruder.io/optimizing-gradient-descent/" target="_blank" rel="noopener">https://ruder.io/optimizing-gradient-descent/</a><br>[4] ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION</p>
+
           
         
       

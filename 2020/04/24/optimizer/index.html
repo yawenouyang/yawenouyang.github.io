@@ -1,37 +1,776 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
 
-{% block page_class %}page-post-detail{% endblock %}
+  
 
 
-{% block content %}
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Deep Learning," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文记录了一些常见的优化器，只有大概，很多地方理解还不到位。 Gradient Descent梯度下降(Gradient Descent)包括三类：批量梯度下降(full-batch gradient descent, 有时也称为batch gradient descent)，随机梯度下降(stochastic gradient descent)，小批量梯度下降(mini-batch gradie">
+<meta property="og:type" content="article">
+<meta property="og:title" content="optimizer">
+<meta property="og:url" content="http://yoursite.com/2020/04/24/optimizer/index.html">
+<meta property="og:site_name" content="yOUng&#39;s Blog">
+<meta property="og:description" content="本文记录了一些常见的优化器，只有大概，很多地方理解还不到位。 Gradient Descent梯度下降(Gradient Descent)包括三类：批量梯度下降(full-batch gradient descent, 有时也称为batch gradient descent)，随机梯度下降(stochastic gradient descent)，小批量梯度下降(mini-batch gradie">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-24T13:02:27.000Z">
+<meta property="article:modified_time" content="2020-05-05T06:45:36.350Z">
+<meta property="article:author" content="young">
+<meta property="article:tag" content="Deep Learning">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/24/optimizer/"/>
+
+
+
+
+
+  <title>optimizer | yOUng's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yOUng's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
 
   <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/24/optimizer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yOUng's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">optimizer</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-24T21:02:27+08:00">
+                2020-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文记录了一些常见的优化器，只有大概，很多地方理解还不到位。</p>
+<h2 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h2><p>梯度下降(Gradient Descent)包括三类：批量梯度下降(full-batch gradient descent, 有时也称为batch gradient descent)，随机梯度下降(stochastic gradient descent)，小批量梯度下降(mini-batch gradient descent)。</p>
+<p>以目标函数$J(\theta) = \sum^m_{i=1} J(\theta;x^{(i)}, y^{(i)})$为例，其中$m$为样本个数</p>
+<h3 id="full-batch-GD"><a href="#full-batch-GD" class="headerlink" title="full-batch GD"></a>full-batch GD</h3><p>每次更新权重需要用到所有的样本，也就是直接用$J(\theta)$对$\theta$求偏导。更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta)</script><p>优点：由于直接优化的是目标函数$J(x)$，所以对于凸优化问题，肯定能达到最优解，对于非凸，肯定能到达极值点。在样本量不大时，收敛也很快。</p>
+<p>缺点：样本很多时，更新一次要很久，样本需要实时加入(on-the-fly)时，也不能用。</p>
+<h3 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h3><p>每次更新只用到了一个样本，更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta;x^{(i)}, y^{(i)})</script><p>优点：对于$m$个样本中相同或相似的样本，梯度也相似，full-batch则进行了冗余的计算，SGD直觉上会更省时。理论上也可以证明，[1]证明了在样本数量足够多时，SGD的计算复杂度更低(达到误差小于$\epsilon$的目标，需要求梯度的次数)：SGD：$O(\frac{1}{\epsilon})$，full-batch GD：$O(nlog(\frac{1}{\epsilon}))$。</p>
+<p>缺点：SGD的波动性很强，因此可能会跳出极值点，但收敛会更难一些。</p>
+<h3 id="mini-batch-GD"><a href="#mini-batch-GD" class="headerlink" title="mini-batch GD"></a>mini-batch GD</h3><p>用部分样本$n$近似全部，更新公式：</p>
+<script type="math/tex; mode=display">
+    \theta = \theta - \eta\nabla_\theta J(\theta; x^{i:i+n}, y^{i:i+n})</script><p>综合了GD和SGD的特点，更稳定收敛的同时，又能够更高效的计算(目前深度学习库可以更好地并行)。</p>
+<p>$\textbf{以上缺点}:$ 所有参数都使用的是相同的学习率，对于稀疏的特征，我们学习率想更大一些，梯度下降往往做不到。</p>
+<h2 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h2><p>Momentum通过累计梯度的方式来加快训练速度，或是跳出极值点：</p>
+<script type="math/tex; mode=display">
+v_t = \gamma v_{t-1} + \eta\nabla_\theta J(\theta) \\
+\theta = \theta - v_t</script><p>不同参数的学习率仍相同。</p>
+<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><p>使历史的梯度影响参数的学习率，达到历史梯度越大的参数的学习率越小，历史梯度越小的参数的学习率越大，对于$\theta<em>i$，$t$时刻的$J(\theta)$对其的偏导记为$g</em>{t,i}$:</p>
+<script type="math/tex; mode=display">
+n_{t,i} = n_{t,i} + g_{t,i}^2 \\
+\theta_{t,i} = \theta_{t,i} - \frac{\eta}{\sqrt{n_{t,i}} +  \epsilon} g_{t,i}</script><p>其中$\alpha$是新的学习率，$\eta$是全局学习率，$\epsilon$是防止分母为0</p>
+<p>特点：学习率跟梯度相关：在较平缓的地方会获得更大的学习率，在较陡峭的地方会降低学习率。但由于$n_t$是递增，这会导致学习率最后会非常低。</p>
+<h2 id="Adadelta"><a href="#Adadelta" class="headerlink" title="Adadelta"></a>Adadelta</h2><p>修改了$n_t$的计算：</p>
+<script type="math/tex; mode=display">
+n_{t,i} = \gamma n_{t,i} + (1-\gamma)g_{t,i}^2</script><p>这里其实$n<em>{t,i}$想表示的是$g</em>{t,i}^2$的期望，RMSProp亦是如此，两者几乎同时提出。</p>
+<p>主要优点：RMSprop和Adadelta在non-stationary(非平稳)设置下会更适合，所谓非平稳是指优化函数会发生变化(可能更适合多任务学习？)，这里还不能太理解原因。</p>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p>Momentum和RMSProp的结合：</p>
+<script type="math/tex; mode=display">
+v_{t,i} = \beta_1 v_{t-1,i} + (1-\beta_1)g_{t,i} \\
+n_{t,i} = \beta_2 n_{t,i} + (1-\beta_2)g_{t,i}^2</script><p>Adam又指出这里$v<em>{t,i}，n</em>{t,i}$并不能代表$g<em>{t,i}，g</em>{t,i}^2$的期望，作者进行了校准：</p>
+<script type="math/tex; mode=display">
+\hat{v_{t,i}} = \frac{v_{t,i}}{1-\beta_1^t}
+\\
+\hat{n_{t,i}} = \frac{n_{t,i}}{1-\beta_2^t}</script><p>最后进行参数更新：</p>
+<script type="math/tex; mode=display">
+\theta_{t,i} = \theta_{t,i} - \frac{\eta}{\sqrt{\hat{n_{t,i}}} +  \epsilon} \hat{v_{t,i}}</script><p>论文中的参考文献指出RMSprop+动量也有相关工作，Adam与它们的不同是使用动量的方式不同，Adam另外还进行了bias操作。</p>
+<p>主要优点：结合了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优点。</p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>[1] Optimization Methods for Large-Scale Machine Learning<br>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28060786">https://zhuanlan.zhihu.com/p/28060786</a><br>[3] <a target="_blank" rel="noopener" href="https://ruder.io/optimizing-gradient-descent/">https://ruder.io/optimizing-gradient-descent/</a><br>[4] ADAM: A METHOD FOR STOCHASTIC OPTIMIZATION</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/02/Zero-Shot-Learning/" rel="next" title="Zero-Shot Learning">
+                <i class="fa fa-chevron-left"></i> Zero-Shot Learning
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/05/PCA-and-SVD/" rel="prev" title="PCA and SVD">
+                PCA and SVD <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
 
     <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+      
     </div>
   </div>
 
-{% endblock %}
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+          </div>
+          
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yawenouyang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-Descent"><span class="nav-number">1.</span> <span class="nav-text">Gradient Descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#full-batch-GD"><span class="nav-number">1.1.</span> <span class="nav-text">full-batch GD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SGD"><span class="nav-number">1.2.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mini-batch-GD"><span class="nav-number">1.3.</span> <span class="nav-text">mini-batch GD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Momentum"><span class="nav-number">2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adagrad"><span class="nav-number">3.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adadelta"><span class="nav-number">4.</span> <span class="nav-text">Adadelta</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">5.</span> <span class="nav-text">Adam</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">5.1.</span> <span class="nav-text">附录</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">young</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

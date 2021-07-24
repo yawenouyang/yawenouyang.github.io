@@ -315,11 +315,14 @@
             <h3 id="Review-Report"><a href="#Review-Report" class="headerlink" title="Review Report"></a>Review Report</h3><h4 id="MetaReview"><a href="#MetaReview" class="headerlink" title="MetaReview"></a>MetaReview</h4><p>This paper extents a previous work of energy scores to detect OOD utterances in open dialogue systems. All reviewers agree that the proposed approach is an interesting idea. Main concerns are about experimental comparisons. The authors addressed most “reason to reject” comments of the reviewers. However, reviewer 2’ comments on the weakness are not fully addressed. Especially, the comments on variety and coherency of augmentation.</p>
 <h4 id="Overall-Recommendation"><a href="#Overall-Recommendation" class="headerlink" title="Overall Recommendation"></a>Overall Recommendation</h4><p>Review #1: 3.5/5; Review #2: 3/5; Review #3: 3.5/5</p>
 <h3 id="Postscript-by-Yawen"><a href="#Postscript-by-Yawen" class="headerlink" title="Postscript (by Yawen)"></a>Postscript (by Yawen)</h3><p>Admittedly, I’m not that satisfied with this paper. </p>
-<p>There are some claims in the paper that I didn’t explain carefully, such as why OOD utterances akin to IND utterances could be more effective in shaping the energy gap. </p>
+<p>There are some claims in the paper that I didn’t explain carefully, such as why OOD utterances akin to IND utterances could be more effective in shaping the energy gap. If you are interested in this problem, this paper may help you:</p>
+<ul>
+<li><strong>Contrastive Training for Improved Out-of-Distribution Detection</strong><br>Jim Winkens, Rudy Bunel, Abhijit Guha Roy, Robert Stanforth, Vivek Natarajan, Joseph R. Ledsam, Patricia MacWilliams, Pushmeet Kohli, Alan Karthikesalingam, Simon Kohl, Taylan Cemgil, S. M. Ali Eslami, Olaf Ronneberger<br>arXiv:2007.05566</li>
+</ul>
 <p>There are also some typos:</p>
 <ul>
 <li>In section 3.2, “the energy function $-E(\mathbf{u})$” is wrong, the correct version is “the negative energy function $-E(\mathbf{u})$”.</li>
-<li>In section 3.2, the parentheses of exponential function in Equation 3 and 4 should be “()”, not “[]”.</li>
+<li>The parentheses of exponential function in Equation 3 and 4 should be “()”, not “[]”.</li>
 <li>In the implementation paragraph in Section 4.1, “$E_y$” should be “$\mathbf{E}_y$”.</li>
 <li>In Table 1, “validation” should be “Validation”.</li>
 </ul>
@@ -445,6 +448,11 @@
           
             <h3 id="Review-Report"><a href="#Review-Report" class="headerlink" title="Review Report"></a>Review Report</h3><h4 id="MetaReview"><a href="#MetaReview" class="headerlink" title="MetaReview"></a>MetaReview</h4><p>This paper proposes a DST model that leverages the related slots from different domains. A slot connecting mechanism is proposed to build connections across domains. All reviewers agreed that the model is simple, technically sound, and effective. Some questions raised by reviewers are addressed by authors, and R1 is inclined to increase the score to 4. Hence, all reviewers agreed to accept this paper and the suggested decision is “accept”.</p>
 <h4 id="Overall-Recommendation"><a href="#Overall-Recommendation" class="headerlink" title="Overall Recommendation"></a>Overall Recommendation</h4><p>Review #1: 4/5; Review #2: 3.5/5; Review #3: 4.5/5</p>
+<h3 id="Postscript-by-Yawen"><a href="#Postscript-by-Yawen" class="headerlink" title="Postscript (by Yawen)"></a>Postscript (by Yawen)</h3><p>If you are interested in the <strong>related-slot problem</strong>, these papers may give you more inspiration:</p>
+<ul>
+<li><strong>MultiWOZ 2.3: A multi-domain task-oriented dialogue dataset enhanced with annotation corrections and co-reference annotation</strong><br>Ting Han, Ximing Liu, Ryuichi Takanobu, Yixin Lian, Chongxuan Huang, Dazhen Wan, Wei Peng, Minlie Huang<br>arXiv:2010.05594</li>
+<li><strong>CrossWOZ: A Large-Scale Chinese Cross-Domain Task-Oriented Dialogue Dataset</strong><br>Qi Zhu, Kaili Huang, Zheng Zhang, Xiaoyan Zhu, Minlie Huang<br>TACL 2020</li>
+</ul>
 
           
         

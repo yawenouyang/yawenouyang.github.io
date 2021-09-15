@@ -87,7 +87,7 @@
 <meta property="og:description" content="Review ReportMetaReviewThis paper extents a previous work of energy scores to detect OOD utterances in open dialogue systems. All reviewers agree that the proposed approach is an interesting idea. Mai">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-06-25T13:25:33.000Z">
-<meta property="article:modified_time" content="2021-07-24T06:12:59.577Z">
+<meta property="article:modified_time" content="2021-09-15T06:11:26.283Z">
 <meta property="article:author" content="Yawen Ouyang">
 <meta name="twitter:card" content="summary">
 
@@ -312,11 +312,13 @@
         <h3 id="Review-Report"><a href="#Review-Report" class="headerlink" title="Review Report"></a>Review Report</h3><h4 id="MetaReview"><a href="#MetaReview" class="headerlink" title="MetaReview"></a>MetaReview</h4><p>This paper extents a previous work of energy scores to detect OOD utterances in open dialogue systems. All reviewers agree that the proposed approach is an interesting idea. Main concerns are about experimental comparisons. The authors addressed most “reason to reject” comments of the reviewers. However, reviewer 2’ comments on the weakness are not fully addressed. Especially, the comments on variety and coherency of augmentation.</p>
 <h4 id="Overall-Recommendation"><a href="#Overall-Recommendation" class="headerlink" title="Overall Recommendation"></a>Overall Recommendation</h4><p>Review #1: 3.5/5; Review #2: 3/5; Review #3: 3.5/5</p>
 <h3 id="Postscript-by-Yawen"><a href="#Postscript-by-Yawen" class="headerlink" title="Postscript (by Yawen)"></a>Postscript (by Yawen)</h3><p>Admittedly, I’m not that satisfied with this paper. </p>
-<p>There are some claims in the paper that I didn’t explain carefully, such as why OOD utterances akin to IND utterances could be more effective in shaping the energy gap. If you are interested in this problem, this paper may help you:</p>
+<p>There are some claims in the paper that I didn’t explain carefully, such as why OOD utterances akin to IND utterances could be more effective in shaping the energy gap. If you are interested in this problem, these papers may help you:</p>
 <ul>
 <li><strong>Contrastive Training for Improved Out-of-Distribution Detection</strong><br>Jim Winkens, Rudy Bunel, Abhijit Guha Roy, Robert Stanforth, Vivek Natarajan, Joseph R. Ledsam, Patricia MacWilliams, Pushmeet Kohli, Alan Karthikesalingam, Simon Kohl, Taylan Cemgil, S. M. Ali Eslami, Olaf Ronneberger<br>arXiv:2007.05566</li>
+<li><strong>Prevalence of neural collapse during the terminal phase of deep learning training</strong><br>Vardan Papyan, XY Han, and David L Donoho.<br>arXiv:2008.08186</li>
 </ul>
-<p>There are also some typos:</p>
+<p>I am also exploring how to calibrate the classifier <em>without</em> auxiliary OOD utterances. Let’s see what will happen :)</p>
+<p>There are also some typos in our ACL version, and please see our updated version <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2107.12542.pdf">link</a>:</p>
 <ul>
 <li>In section 3.2, “the energy function $-E(\mathbf{u})$” is wrong, the correct version is “the negative energy function $-E(\mathbf{u})$”.</li>
 <li>The parentheses of exponential function in Equation 3 and 4 should be “()”, not “[]”.</li>

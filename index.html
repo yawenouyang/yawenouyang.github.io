@@ -180,9 +180,9 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
             Home
           </a>
@@ -190,9 +190,9 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
+          <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             About
           </a>
@@ -227,6 +227,127 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/11/02/Out-of-Distribution-Generalization-Challenge-in-Dialog-State-Tracking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yawen Ouyang's Small Planet">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2022/11/02/Out-of-Distribution-Generalization-Challenge-in-Dialog-State-Tracking/" itemprop="url">Out-of-Distribution Generalization Challenge in Dialog State Tracking</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-11-02T17:00:06+08:00">
+                2022-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Review-Report"><a href="#Review-Report" class="headerlink" title="Review Report"></a>Review Report</h3><h4 id="MetaReview"><a href="#MetaReview" class="headerlink" title="MetaReview"></a>MetaReview</h4><p>This is an interesting paper that attempts to link out-of-distribution generalization to dialog state tracking. I am not completely convinced that unseen semantics are necessarily “out-of-distribution”; they may be in-distribution but on the long tail. For example, we might imagine that our training data follows the simple distribution P(U_1, U_2) = P_1(U_1) P_2(U_2). Given a finite training set, we might still encounter unseen tuples at test time, especially for rare values of U_1 and U_2. This is a different situation from, say, P(U_1, U_2) = P_1(U_1) P(U_2 | U_1), in which both U_1 and U_2 are frequent at training time but never appear together, implying P(U_2 | U_1) ~= 0. So I’m not convinced that compositional generalization and OOD generalization are the same phenomenon, as the paper seems to imply. Nonetheless, the paper offers interesting empirical results and is clearly written, so I think it would make a good contribution to the workshop.</p>
+<h4 id="Overall-Recommendation"><a href="#Overall-Recommendation" class="headerlink" title="Overall Recommendation"></a>Overall Recommendation</h4><p>Review #1: 7/10; Review #2: 7/10</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -314,6 +435,7 @@
           
             <h3 id="Review-Report"><a href="#Review-Report" class="headerlink" title="Review Report"></a>Review Report</h3><h4 id="MetaReview"><a href="#MetaReview" class="headerlink" title="MetaReview"></a>MetaReview</h4><p>The paper is well written. The originality of the paper resides in applying the AIK method to a new task, namely multi-label unknown intent detection. The obtained results are interesting. The paper is missing some information. The authors have provided them in their rebuttal.</p>
 <h4 id="Overall-Recommendation"><a href="#Overall-Recommendation" class="headerlink" title="Overall Recommendation"></a>Overall Recommendation</h4><p>Review #1: 4/5; Review #2: 4/5</p>
+<h3 id="Postscript-by-Yawen"><a href="#Postscript-by-Yawen" class="headerlink" title="Postscript (by Yawen)"></a>Postscript (by Yawen)</h3><p>I need to improve my drawing skills…</p>
 
           
         
@@ -786,7 +908,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

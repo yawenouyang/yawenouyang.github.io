@@ -1,0 +1,89 @@
+papers:
+
+  - title: "A Periodic Bayesian Flow for Material Generation"
+    authors: "Hanlin Wu, Yuxuan Song, Jingjing Gong, Ziyao Cao, <b>Yawen Ouyang</b>, Jianbing Zhang, Hao Zhou, Wei-Ying Ma, Jingjing Liu"
+    venue: "ICLR 2025 (Spotlight)."
+    paper_pdf: "https://openreview.net/pdf?id=Lz0XW99tE0"
+    selected: ai4m
+
+  - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
+    authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
+    venue: "AI4MAT-ICLR 2025 (Spotlight)."
+    paper_pdf: "https://openreview.net/pdf?id=Qjv1Kh1vs8"
+    selected: ai4m
+
+  - title: "Towards Extrapolation in Deep Material Property Regression"
+    authors: "Pan Mianzhi, JianFei Li, <b>Yawen Ouyang</b>, Wei-Ying Ma, Jianbing Zhang, Hao Zhou"
+    venue: "AI4MAT-ICLR 2025 (Spotlight)."
+    paper_pdf: "https://openreview.net/pdf?id=czVzzXPCkw"
+    selected: ai4m
+
+  - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
+    authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
+    venue: "ChemRxiv'24."
+    paper_pdf: "https://chemrxiv.org/engage/api-gateway/chemrxiv/assets/orp/resource/item/67471c385a82cea2fa1c5803/original/generative-ai-powered-inverse-design-for-tailored-narrowband-molecular-emitters.pdf"
+    # code: "https://github.com/saveski-lab/supernotes"
+    selected: ai4m
+
+  - title: "M2DF: Multi-grained Multi-curriculum Denoising Framework for Multimodal Aspect-based Sentiment Analysis"
+    authors: "Fei Zhao, Chunhui Li, Zhen Wu, <b>Yawen Ouyang</b>, Jianbing Zhang, Xinyu Dai"
+    venue: "EMNLP'23."
+    paper_pdf: "https://aclanthology.org/2023.emnlp-main.561.pdf"
+    code: "https://github.com/grandchicken/M2DF"
+    selected: nlp
+
+  - title: "Debias NLU Datasets via Training-free Perturbations"
+    authors: "Qi Guo, Yuanhang Tang, <b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai"
+    venue: "EMNLP'23 Findings."
+    paper_pdf: "https://aclanthology.org/2023.findings-emnlp.726.pdf"
+    code: "https://aclanthology.org/2023.findings-emnlp.726.pdf"
+    selected: nlp
+
+  - title: "On Prefix-tuning for Lightweight Out-of-distribution Detection"
+    authors: "<b>Yawen Ouyang</b>, Yongchang Cao, Yuan Gao, Zhen Wu, Jianbing Zhang, Xinyu Dai"
+    venue: "ACL'23."
+    paper_pdf: "https://aclanthology.org/2023.acl-long.85.pdf"
+    code: "https://github.com/1250658183/PTO"
+    selected: nlp
+
+  # - title: "IDOS: A Unified Debiasing Framework via Word Shuffling"
+  #   authors: "Yuanhang Tang, <b>Yawen Ouyang</b>, Zhen Wu, Baohua Zhang, Jiaying Zhang, Xinyu Dai"
+  #   venue: "NLPCC'23: International Conference on Natural Language Processing and Chinese Computing. 2023."
+  #   paper_pdf: "https://link.springer.com/chapter/10.1007/978-3-031-44696-2_25"
+  #   code: "https://github.com/yuanhangtangle/shuffle-debias"
+  #   selected: nlp
+
+  # - title: "Out-of-Distribution Generalization Challenge in Dialog State Tracking"
+  #   authors: "Jiasheng Ye, <b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai"
+  #   venue: "NeurIPS'22 Workshop on Distribution Shifts. 2022."
+  #   paper_pdf: "https://openreview.net/pdf?id=Z-k91NB8Eh"
+  #   code: "https://github.com/yegcjs/DST_OOD"
+  #   selected: nlp
+
+  - title: "Towards Multi-label Unknown Intent Detection"
+    authors: "<b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai, Shujian Huang, Jiajun Chen"
+    venue: "COLING'22."
+    paper_pdf: "https://aclanthology.org/2022.coling-1.52.pdf"
+    code: "https://github.com/yawenouyang/AIK"
+    selected: nlp
+
+  - title: "MEDA: Meta-Learning with Data Augmentation for Few-Shot Text Classification"
+    authors: "Pengfei Sun, <b>Yawen Ouyang</b>, Wenming Zhang, Xinyu Dai"
+    venue: "IJCAI'21."
+    paper_pdf: "https://www.ijcai.org/proceedings/2021/0541.pdf"
+    # code: ""
+    selected: nlp
+
+  - title: "Energy-based Unknown Intent Detection with Data Manipulation"
+    authors: "<b>Yawen Ouyang</b>, Jiasheng Ye, Yu Chen, Xinyu Dai, Shujian Huang, Jiajun Chen"
+    venue: "ACL'21 Findings."
+    paper_pdf: "files/acl2021.pdf"
+    code: "https://github.com/yawenouyang/GOT"
+    selected: nlp
+
+  - title: "Dialogue State Tracking with Explicit Slot Connection Modeling"
+    authors: "<b>Yawen Ouyang</b>, Moxin Chen, Xinyu Dai, Yinggong Zhao, Shujian Huang, Jiajun Chen"
+    venue: "ACL'20."
+    paper_pdf: "https://www.aclweb.org/anthology/2020.acl-main.5.pdf"
+    code: "https://github.com/yawenouyang/DST-SC"
+    selected: nlp

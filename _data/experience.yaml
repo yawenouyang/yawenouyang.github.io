@@ -1,0 +1,32 @@
+experiences:
+
+- place: "Tsinghua University"
+  time: "2023/10 - now"
+  title: "Postdoctoral Researcher"
+  subtitle: "Institute for AI Industry Research"
+  category: "work"
+
+- place: "Nanjing University"
+  time: "2018/09 - 2023/09"
+  title: "Ph.D. Student"
+  subtitle: "Computer Science and Technology"
+  category: "school"
+
+- place: "Bytedance"
+  time: "2021/12 - 2022/03"
+  title: "Research Intern"
+  subtitle: "AI Lab"
+  category: "work"
+
+- place: "Nanjing University"
+  time: "2017/09 - 2018/06"
+  title: "Undergraduate Intern"
+  subtitle: "NLP Lab"
+  category: "work"
+
+- place: "Dalian University of Technology"
+  time: "2014/09 - 2018/06"
+  title: "Undergraduate Student"
+  subtitle: "Software Engineering <br/> National Scholarship"
+  category: "school"
+

@@ -1,5 +1,11 @@
 papers:
 
+  - title: "MOF-BFN: Metal-Organic Frameworks Structure Prediction via Bayesian Flow Networks"
+    authors: "Rui Jiao, Hanlin Wu, Wenbing Huang, Yuxuan Song, <b>Yawen Ouyang</b>, Yu Rong, Tingyang Xu, Pengju Wang, Hao Zhou, Wei-Ying Ma, Jingjing Liu, Yang Liu"
+    venue: "NeurIPS 2025."
+    # paper_pdf: "https://yawenouyang.github.io/"
+    selected: ai4m
+
   - title: "A Periodic Bayesian Flow for Material Generation"
     authors: "Hanlin Wu, Yuxuan Song, Jingjing Gong, Ziyao Cao, <b>Yawen Ouyang</b>, Jianbing Zhang, Hao Zhou, Wei-Ying Ma, Jingjing Liu"
     venue: "ICLR 2025 (Spotlight)."
@@ -20,8 +26,8 @@ papers:
 
   - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
     authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
-    venue: "ChemRxiv'24."
-    paper_pdf: "https://chemrxiv.org/engage/api-gateway/chemrxiv/assets/orp/resource/item/67471c385a82cea2fa1c5803/original/generative-ai-powered-inverse-design-for-tailored-narrowband-molecular-emitters.pdf"
+    venue: "Digital Discovery"
+    paper_pdf: "https://pubs.rsc.org/en/content/articlepdf/2025/dd/d5dd00268k"
     # code: "https://github.com/saveski-lab/supernotes"
     selected: ai4m
 

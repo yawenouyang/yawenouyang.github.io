@@ -26,7 +26,7 @@ papers:
 
   - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
     authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
-    venue: "Digital Discovery"
+    venue: "Digital Discovery."
     paper_pdf: "https://pubs.rsc.org/en/content/articlepdf/2025/dd/d5dd00268k"
     # code: "https://github.com/saveski-lab/supernotes"
     selected: ai4m
@@ -73,12 +73,12 @@ papers:
     code: "https://github.com/yawenouyang/AIK"
     selected: nlp
 
-  - title: "MEDA: Meta-Learning with Data Augmentation for Few-Shot Text Classification"
-    authors: "Pengfei Sun, <b>Yawen Ouyang</b>, Wenming Zhang, Xinyu Dai"
-    venue: "IJCAI'21."
-    paper_pdf: "https://www.ijcai.org/proceedings/2021/0541.pdf"
-    # code: ""
-    selected: nlp
+  # - title: "MEDA: Meta-Learning with Data Augmentation for Few-Shot Text Classification"
+  #   authors: "Pengfei Sun, <b>Yawen Ouyang</b>, Wenming Zhang, Xinyu Dai"
+  #   venue: "IJCAI'21."
+  #   paper_pdf: "https://www.ijcai.org/proceedings/2021/0541.pdf"
+  #   # code: ""
+  #   selected: nlp
 
   - title: "Energy-based Unknown Intent Detection with Data Manipulation"
     authors: "<b>Yawen Ouyang</b>, Jiasheng Ye, Yu Chen, Xinyu Dai, Shujian Huang, Jiajun Chen"

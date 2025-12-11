@@ -3,7 +3,7 @@ papers:
   - title: "MOF-BFN: Metal-Organic Frameworks Structure Prediction via Bayesian Flow Networks"
     authors: "Rui Jiao, Hanlin Wu, Wenbing Huang, Yuxuan Song, <b>Yawen Ouyang</b>, Yu Rong, Tingyang Xu, Pengju Wang, Hao Zhou, Wei-Ying Ma, Jingjing Liu, Yang Liu"
     venue: "NeurIPS 2025."
-    # paper_pdf: "https://yawenouyang.github.io/"
+    paper_pdf: "https://openreview.net/pdf?id=pNwiFucAtA"
     selected: ai4m
 
   - title: "A Periodic Bayesian Flow for Material Generation"

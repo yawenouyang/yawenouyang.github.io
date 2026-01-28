@@ -1,5 +1,11 @@
 papers:
 
+  - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
+    authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
+    venue: "ICLR 2026."
+    paper_pdf: "https://openreview.net/pdf?id=jiSt3M25TP"
+    selected: ai4m
+
   - title: "MOF-BFN: Metal-Organic Frameworks Structure Prediction via Bayesian Flow Networks"
     authors: "Rui Jiao, Hanlin Wu, Wenbing Huang, Yuxuan Song, <b>Yawen Ouyang</b>, Yu Rong, Tingyang Xu, Pengju Wang, Hao Zhou, Wei-Ying Ma, Jingjing Liu, Yang Liu"
     venue: "NeurIPS 2025."
@@ -10,12 +16,6 @@ papers:
     authors: "Hanlin Wu, Yuxuan Song, Jingjing Gong, Ziyao Cao, <b>Yawen Ouyang</b>, Jianbing Zhang, Hao Zhou, Wei-Ying Ma, Jingjing Liu"
     venue: "ICLR 2025 (Spotlight)."
     paper_pdf: "https://openreview.net/pdf?id=Lz0XW99tE0"
-    selected: ai4m
-
-  - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
-    authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
-    venue: "AI4MAT-ICLR 2025 (Spotlight)."
-    paper_pdf: "https://openreview.net/pdf?id=Qjv1Kh1vs8"
     selected: ai4m
 
   - title: "Towards Extrapolation in Deep Material Property Regression"

@@ -1,5 +1,11 @@
 papers:
 
+  - title: "Enhancing Spatial Reasoning in Large Language Models for Metal-Organic Frameworks Structure Prediction"
+    authors: "Mianzhi Pan, JianFei Li, Peishuo Liu, Botian Wang, <b>Yawen Ouyang</b>, Yiming Rong, Hao Zhou, Jianbing Zhang"
+    venue: "KDD 2026."
+    paper_pdf: "https://arxiv.org/abs/2601.09285"
+    selected: ai4m
+
   - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
     authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
     venue: "ICLR 2026."

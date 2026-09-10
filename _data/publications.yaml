@@ -1,41 +1,53 @@
 papers:
 
+  - title: "AMix-2: Establishing Protein as a Native Modality in Large Language Models"
+    authors: "Keyue Qiu, Yixin Wu, Lihao Wang, <b>Yawen Ouyang</b>, Jixiang Yu, Zihan Zhou, Changze Lv, et al."
+    venue: "arXiv 2026."
+    paper_pdf: "https://arxiv.org/abs/2605.30963"
+    code: "https://github.com/AMix-Bio/AMix-2"
+    selected: ai4s
+
   - title: "Enhancing Spatial Reasoning in Large Language Models for Metal-Organic Frameworks Structure Prediction"
     authors: "Mianzhi Pan, JianFei Li, Peishuo Liu, Botian Wang, <b>Yawen Ouyang</b>, Yiming Rong, Hao Zhou, Jianbing Zhang"
     venue: "KDD 2026."
     paper_pdf: "https://arxiv.org/abs/2601.09285"
-    selected: ai4m
+    code: "https://github.com/panmianzhi/MOF-LLM"
+    selected: ai4s
 
   - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
     authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
     venue: "ICLR 2026."
     paper_pdf: "https://openreview.net/pdf?id=jiSt3M25TP"
-    selected: ai4m
+    code: "https://github.com/GenSI-THUAIR/MoMa"
+    selected: ai4s
 
   - title: "MOF-BFN: Metal-Organic Frameworks Structure Prediction via Bayesian Flow Networks"
     authors: "Rui Jiao, Hanlin Wu, Wenbing Huang, Yuxuan Song, <b>Yawen Ouyang</b>, Yu Rong, Tingyang Xu, Pengju Wang, Hao Zhou, Wei-Ying Ma, Jingjing Liu, Yang Liu"
     venue: "NeurIPS 2025."
     paper_pdf: "https://openreview.net/pdf?id=pNwiFucAtA"
-    selected: ai4m
+    code: "https://github.com/jiaor17/MOF-BFN"
+    selected: ai4s
 
   - title: "A Periodic Bayesian Flow for Material Generation"
     authors: "Hanlin Wu, Yuxuan Song, Jingjing Gong, Ziyao Cao, <b>Yawen Ouyang</b>, Jianbing Zhang, Hao Zhou, Wei-Ying Ma, Jingjing Liu"
     venue: "ICLR 2025 (Spotlight)."
     paper_pdf: "https://openreview.net/pdf?id=Lz0XW99tE0"
-    selected: ai4m
+    code: "https://github.com/wu-han-lin/CrysBFN"
+    selected: ai4s
 
   - title: "Towards Extrapolation in Deep Material Property Regression"
     authors: "Pan Mianzhi, JianFei Li, <b>Yawen Ouyang</b>, Wei-Ying Ma, Jianbing Zhang, Hao Zhou"
     venue: "AI4MAT-ICLR 2025 (Spotlight)."
     paper_pdf: "https://openreview.net/pdf?id=czVzzXPCkw"
-    selected: ai4m
+    code: "https://github.com/panmianzhi/Matching-based-EXtrapolation"
+    selected: ai4s
 
   - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
     authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
     venue: "Digital Discovery."
     paper_pdf: "https://pubs.rsc.org/en/content/articlepdf/2025/dd/d5dd00268k"
-    # code: "https://github.com/saveski-lab/supernotes"
-    selected: ai4m
+    code: "https://zenodo.org/records/17034464"
+    selected: ai4s
 
   - title: "M2DF: Multi-grained Multi-curriculum Denoising Framework for Multimodal Aspect-based Sentiment Analysis"
     authors: "Fei Zhao, Chunhui Li, Zhen Wu, <b>Yawen Ouyang</b>, Jianbing Zhang, Xinyu Dai"
@@ -48,7 +60,7 @@ papers:
     authors: "Qi Guo, Yuanhang Tang, <b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai"
     venue: "EMNLP'23 Findings."
     paper_pdf: "https://aclanthology.org/2023.findings-emnlp.726.pdf"
-    code: "https://aclanthology.org/2023.findings-emnlp.726.pdf"
+    code: "https://github.com/GuoQi2000/Debias_PDD"
     selected: nlp
 
   - title: "On Prefix-tuning for Lightweight Out-of-distribution Detection"
@@ -58,20 +70,6 @@ papers:
     code: "https://github.com/1250658183/PTO"
     selected: nlp
 
-  # - title: "IDOS: A Unified Debiasing Framework via Word Shuffling"
-  #   authors: "Yuanhang Tang, <b>Yawen Ouyang</b>, Zhen Wu, Baohua Zhang, Jiaying Zhang, Xinyu Dai"
-  #   venue: "NLPCC'23: International Conference on Natural Language Processing and Chinese Computing. 2023."
-  #   paper_pdf: "https://link.springer.com/chapter/10.1007/978-3-031-44696-2_25"
-  #   code: "https://github.com/yuanhangtangle/shuffle-debias"
-  #   selected: nlp
-
-  # - title: "Out-of-Distribution Generalization Challenge in Dialog State Tracking"
-  #   authors: "Jiasheng Ye, <b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai"
-  #   venue: "NeurIPS'22 Workshop on Distribution Shifts. 2022."
-  #   paper_pdf: "https://openreview.net/pdf?id=Z-k91NB8Eh"
-  #   code: "https://github.com/yegcjs/DST_OOD"
-  #   selected: nlp
-
   - title: "Towards Multi-label Unknown Intent Detection"
     authors: "<b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai, Shujian Huang, Jiajun Chen"
     venue: "COLING'22."
@@ -79,17 +77,10 @@ papers:
     code: "https://github.com/yawenouyang/AIK"
     selected: nlp
 
-  # - title: "MEDA: Meta-Learning with Data Augmentation for Few-Shot Text Classification"
-  #   authors: "Pengfei Sun, <b>Yawen Ouyang</b>, Wenming Zhang, Xinyu Dai"
-  #   venue: "IJCAI'21."
-  #   paper_pdf: "https://www.ijcai.org/proceedings/2021/0541.pdf"
-  #   # code: ""
-  #   selected: nlp
-
   - title: "Energy-based Unknown Intent Detection with Data Manipulation"
     authors: "<b>Yawen Ouyang</b>, Jiasheng Ye, Yu Chen, Xinyu Dai, Shujian Huang, Jiajun Chen"
     venue: "ACL'21 Findings."
-    paper_pdf: "files/acl2021.pdf"
+    paper_pdf: "https://aclanthology.org/2021.findings-acl.252.pdf"
     code: "https://github.com/yawenouyang/GOT"
     selected: nlp
 

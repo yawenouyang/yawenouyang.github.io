@@ -6,53 +6,24 @@ title: Home
 <div class="docs-section" id="bio">
   <h4>Bio</h4>
   <p>
-    I am currently a researcher at Shanghai AI Lab, focusing on llm for science. Previously, I was a postdoctoral researcher at Tsinghua University, working with <a href="https://air.tsinghua.edu.cn/en/info/1046/1189.htm" target="_blank">Prof. Weiying Ma</a> and <a href="https://zhouh.github.io/" target="_blank">Prof. Hao Zhou</a>, supported by the NSFC. Before that, I completed my Ph.D. at Nanjing University under the supervision of <a href="https://ai.nju.edu.cn/daixinyu/index.htm" target="_blank">Prof. Xinyu Dai</a>. During my Ph.D., I also interned at Bytedance AI Lab, where I worked with <a href="https://scholar.google.com/citations?user=qkdvKNoAAAAJ&hl=en" target="_blank">Prof. Hongning Wang</a>.
+    I am currently a researcher at Shanghai AI Lab, focusing on LLMs for science. Previously, I was a postdoctoral researcher at Tsinghua University, working with <a href="https://air.tsinghua.edu.cn/en/info/1046/1189.htm" target="_blank">Prof. Weiying Ma</a> and <a href="https://zhouh.github.io/" target="_blank">Prof. Hao Zhou</a>, supported by the NSFC. Before that, I completed my Ph.D. at Nanjing University under the supervision of <a href="https://ai.nju.edu.cn/daixinyu/index.htm" target="_blank">Prof. Xinyu Dai</a>. During my Ph.D., I also interned at ByteDance AI Lab, where I worked with <a href="https://scholar.google.com/citations?user=qkdvKNoAAAAJ&amp;hl=en" target="_blank">Prof. Hongning Wang</a>.
   </p>
 </div>
-
-<!--
-<div class="docs-section" id="prospective-students">  
-  <h4>Prospective Students</h4>
-  <p>
-  <span style="display: inline-block; margin-bottom: 5px">
-    <b>I'm recruiting PhD students to start Fall 2025 at the University of Washington!</b> 
-  </span>
-  <br/> 
-  <span style="display: inline-block; margin-bottom: 5px">
-    I'm looking for students passionate about developing new <u>social media algorithms</u>, both broadly and within the scope of this <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2403434" target="_blank">NSF grant</a> (collaboration with Stanford and Northwestern). For other examples, please see my recent publications. <br/>
-  </span>
-  <span style="display: inline-block; margin-bottom: 5px">
-    Students with strong technical skills and background or interest in social network analysis, machine learning, causal inference, or natural language processing would be a great fit.
-  </span>
-  <br/>
-  <span style="display: inline-block; margin-bottom: 5px">
-    If you are interested, please apply to the UW iSchool <a href="https://ischool.uw.edu/programs/phd/admissions" target="_blank">PhD program</a> and mention me in your application.
-  </span>
-  <br/>
-  <span>
-    If you have any questions, feel free to reach out.
-  </span>
-  </p> 
-</div>
--->
 
 <!-- ========== PUBLICATIONS ========== -->
 <div class="docs-section" id="publications">
-  <h4>Publications</h4>
-
-  <!-- <p>Most recent publications on <a href="{{ site.data.main_info.google_scholar }}" target="_blank">Google Scholar</a>.<br/> -->
-  <!-- <sup>‡</sup> indicates equal contribution. -->
-  </p>
+  <h4>Selected Works</h4>
+  <p class="publication-note">I only list papers to which I made non-trivial contributions.</p>
 
   <ul class="tab-nav">
-    <li><div class="button active" data-ref="#papers-ai4m">AI for materials</div></li>
+    <li><div class="button active" data-ref="#papers-ai4s">AI for science</div></li>
     <li><div class="button" data-ref="#papers-nlp">AI for language</div></li>
   </ul>
 
   <div class="tab-content">
 
-    <div class="tab-pane active" id="papers-ai4m">
-      {% assign selected_papers = site.data.publications.papers | where: "selected", "ai4m" %}
+    <div class="tab-pane active" id="papers-ai4s">
+      {% assign selected_papers = site.data.publications.papers | where: "selected", "ai4s" %}
       {% for paper in selected_papers %}
         <div class="paper">
           <p class="title"><b>{{ paper.title }}</b></p>
@@ -128,115 +99,6 @@ title: Home
   </div>
 </div>
 
-<!-- ========== PROJECTS ========== 
-<div class="docs-section" id="projects">
-  <h4>Projects</h4>
-
-  <ul class="tab-nav">
-    <li><div class="button active" data-ref="#projects-selected">Selected</div></li>
-    <li><div class="button" data-ref="#projects-all">All</div></li>
-  </ul>
-
-  <div class="tab-content">
-    <div class="tab-pane active" id="projects-selected">
-      {% assign selected_projects = site.data.projects.projects | where: "selected", "y" %}
-      {% for project in selected_projects %}
-        {% assign index_modulo = forloop.index0 | modulo:3 %}
-        {% if index_modulo == 0 %}
-          <div class="row">
-        {% endif %}
-
-          <div class="four columns">
-            <div class="project-container">
-
-                <div class="project-image-container">
-                  <a href="{{ project.url }}">
-                    <img src="{{ project.thumbnail }}" class="u-max-full-width" />
-                  </a>
-                </div>
-
-                <div class="project-caption">
-                  <b>{{ project.title }}</b> <br/>
-                  {{ project.subtitle }}
-                </div>
-
-            </div>
-          </div>
-
-        {% if index_modulo == 2 %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-
-    <div class="tab-pane" id="projects-all">
-      {% for project in site.data.projects.projects %}
-        {% assign index_modulo = forloop.index0 | modulo:3 %}
-        {% if index_modulo == 0 %}
-          <div class="row">
-        {% endif %}
-
-          <div class="four columns">
-            <div class="project-container">
-
-                <div class="project-image-container">
-                  <a href="{{ project.url }}">
-                    <img src="{{ project.thumbnail }}" class="u-max-full-width" />
-                  </a>
-                </div>
-
-                <div class="project-caption">
-                  <b>{{ project.title }}</b> <br/>
-                  {{ project.subtitle }}
-                </div>
-
-            </div>
-          </div>
-
-        {% if index_modulo == 2 %}
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-
-</div>
--->
-
-<!-- ========== RESUME ========== -->
-<!-- <div class="docs-section" id="resume">
-  <h4>Vitæ</h4>
-
-  <ul class="timeline">
-    {% for exp in site.data.experience.experiences %}
-    <li>
-      {% if exp.category == "work" %}
-      <div class="direction-l">
-      {% else %}
-      <div class="direction-r">
-      {% endif %}
-        <div class="flag-wrapper">
-          <span class="flag">{{ exp.place }}</span>
-          <span class="time-wrapper"><span class="time">{{ exp.time }}</span></span>
-        </div>
-        <div class="desc"><b>{{ exp.title }}</b> <br/> {{ exp.subtitle }}</div>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-</div> -->
-
 <div class="docs-section" id="template">
-  <!-- <h4>Website Design</h4>
-  Since I made this website, many people have found this Jekyll template useful [
-  {% for template_user in site.data.template_users.template_users %}
-  <a href="{{ template_user }}" target="_blank">{{ forloop.index }}</a>{% if forloop.last %}{% else %},{% endif %}
-  {% endfor %}
-  ].
-  You can find all the code needed to build your website in this <a href="https://github.com/msaveski/www_personal" target="_blank">GitHub repo</a>.
-  Feel free to use it. <br/>
-
-  If you end up using it, please link to here and drop me an email.
-  I'm always happy to see people using it. -->
   The website template is from <a href="https://faculty.washington.edu/msaveski/" target="_blank">Martin Saveski</a>.
 </div>

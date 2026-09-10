@@ -4,7 +4,6 @@ papers:
     authors: "Keyue Qiu, Yixin Wu, Lihao Wang, <b>Yawen Ouyang</b>, Jixiang Yu, Zihan Zhou, Changze Lv, et al."
     venue: "arXiv 2026."
     paper_pdf: "https://arxiv.org/abs/2605.30963"
-    code: "https://github.com/AMix-Bio/AMix-2"
     selected: ai4s
 
   - title: "Enhancing Spatial Reasoning in Large Language Models for Metal-Organic Frameworks Structure Prediction"

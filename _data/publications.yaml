@@ -1,8 +1,15 @@
 papers:
 
+  - title: "PFArena: Benchmarking Language Models for Protein Modification"
+    authors: "<b>Yawen Ouyang</b>, Xinbo Zhang, Ziyuan Ma, Yixin Wu, Wenbin Liao, Feiran Zhang, Wenjie Li, et al."
+    venue: "Tech report, Sep. 2026."
+    paper_pdf: "https://arxiv.org/abs/2609.28921"
+    code: "https://github.com/AMix-Bio/PFArena"
+    selected: ai4s
+
   - title: "AMix-2: Establishing Protein as a Native Modality in Large Language Models"
     authors: "Keyue Qiu, Yixin Wu, Lihao Wang, <b>Yawen Ouyang</b>, Jixiang Yu, Zihan Zhou, Changze Lv, et al."
-    venue: "arXiv 2026."
+    venue: "Tech report, May 2026."
     paper_pdf: "https://arxiv.org/abs/2605.30963"
     selected: ai4s
 

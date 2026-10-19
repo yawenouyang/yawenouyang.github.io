@@ -61,6 +61,7 @@ papers:
     paper_pdf: "https://aclanthology.org/2023.emnlp-main.561.pdf"
     code: "https://github.com/grandchicken/M2DF"
     selected: nlp
+    hidden: true
 
   - title: "Debias NLU Datasets via Training-free Perturbations"
     authors: "Qi Guo, Yuanhang Tang, <b>Yawen Ouyang</b>, Zhen Wu, Xinyu Dai"

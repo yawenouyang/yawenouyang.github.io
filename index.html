@@ -6,14 +6,13 @@ title: Home
 <div class="docs-section" id="bio">
   <h4>Bio</h4>
   <p>
-    I am currently a researcher at Shanghai AI Lab, focusing on LLMs for science. Previously, I was a postdoctoral researcher at Tsinghua University, working with <a href="https://air.tsinghua.edu.cn/en/info/1046/1189.htm" target="_blank">Prof. Weiying Ma</a> and <a href="https://zhouh.github.io/" target="_blank">Prof. Hao Zhou</a>, supported by the NSFC. Before that, I completed my Ph.D. at Nanjing University under the supervision of <a href="https://ai.nju.edu.cn/daixinyu/index.htm" target="_blank">Prof. Xinyu Dai</a>. During my Ph.D., I also interned at ByteDance AI Lab, where I worked with <a href="https://scholar.google.com/citations?user=qkdvKNoAAAAJ&amp;hl=en" target="_blank">Prof. Hongning Wang</a>.
+    I am currently a researcher at Shanghai AI Lab, focusing on LLMs for science. Previously, I was a postdoctoral researcher at Tsinghua University, working with <a href="https://air.tsinghua.edu.cn/en/info/1046/1189.htm" target="_blank">Prof. Weiying Ma</a> and <a href="https://zhouh.github.io/" target="_blank">Prof. Hao Zhou</a>, supported by the NSFC. Before that, I completed my Ph.D. at Nanjing University under the supervision of <a href="https://ai.nju.edu.cn/daixinyu/index.htm" target="_blank">Prof. Xinyu Dai</a>. During my Ph.D., I also interned at ByteDance AI Lab. Here is my <a href="{{ '/assets/cv/my_cv.pdf' | prepend: site.baseurl }}" target="_blank">CV</a>.
   </p>
 </div>
 
 <!-- ========== PUBLICATIONS ========== -->
 <div class="docs-section" id="publications">
   <h4>Selected Works</h4>
-  <p class="publication-note">I only list papers to which I made non-trivial contributions.</p>
 
   <ul class="tab-nav">
     <li><div class="button active" data-ref="#papers-ai4s">AI for science</div></li>
@@ -25,9 +24,9 @@ title: Home
     <div class="tab-pane active" id="papers-ai4s">
       {% assign selected_papers = site.data.publications.papers | where: "selected", "ai4s" %}
       {% for paper in selected_papers %}
+        {% unless paper.hidden %}
         <div class="paper">
           <p class="title"><b>{{ paper.title }}</b></p>
-          <p>{{ paper.authors }}</p>
           <p><i>{{ paper.venue }}</i></p>
            <div class="paper-buttons">
             {% if paper.paper_pdf %}
@@ -56,15 +55,16 @@ title: Home
 
           </div>
         </div>
+        {% endunless %}
       {% endfor %}
     </div>
 
     <div class="tab-pane" id="papers-nlp">
       {% assign selected_papers = site.data.publications.papers | where: "selected", "nlp" %}
       {% for paper in selected_papers %}
+        {% unless paper.hidden %}
         <div class="paper">
           <p class="title"><b>{{ paper.title }}</b></p>
-          <p>{{ paper.authors }}</p>
           <p><i>{{ paper.venue }}</i></p>
            <div class="paper-buttons">
             {% if paper.paper_pdf %}
@@ -93,6 +93,7 @@ title: Home
 
           </div>
         </div>
+        {% endunless %}
       {% endfor %}
     </div>
     

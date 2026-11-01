@@ -1,59 +1,65 @@
 papers:
 
+  - title: "Trion-1: Unifying Language, Protein Sequence, and Structure with Diffusion Language Models"
+    authors: "Tianyu Lu, Kaicheng Yang, Jiangtao Feng, Keyue Qiu, <b>Yawen Ouyang</b>, Yixin Wu, Xinbo Zhang, Lihao Wang, Wei-Ying Ma, Hao Zhou"
+    venue: "Tech report, Oct. 2026."
+    paper_pdf: "https://arxiv.org/abs/2610.31215"
+    selected: protein
+
   - title: "PFArena: Benchmarking Language Models for Protein Modification"
     authors: "<b>Yawen Ouyang</b>, Xinbo Zhang, Ziyuan Ma, Yixin Wu, Wenbin Liao, Feiran Zhang, Wenjie Li, et al."
     venue: "Tech report, Sep. 2026."
     paper_pdf: "https://arxiv.org/abs/2609.28921"
     code: "https://github.com/AMix-Bio/PFArena"
-    selected: ai4s
+    selected: protein
 
   - title: "AMix-2: Establishing Protein as a Native Modality in Large Language Models"
     authors: "Keyue Qiu, Yixin Wu, Lihao Wang, <b>Yawen Ouyang</b>, Jixiang Yu, Zihan Zhou, Changze Lv, et al."
     venue: "Tech report, May 2026."
     paper_pdf: "https://arxiv.org/abs/2605.30963"
-    selected: ai4s
+    selected: protein
 
   - title: "Enhancing Spatial Reasoning in Large Language Models for Metal-Organic Frameworks Structure Prediction"
     authors: "Mianzhi Pan, JianFei Li, Peishuo Liu, Botian Wang, <b>Yawen Ouyang</b>, Yiming Rong, Hao Zhou, Jianbing Zhang"
     venue: "KDD 2026."
     paper_pdf: "https://arxiv.org/abs/2601.09285"
     code: "https://github.com/panmianzhi/MOF-LLM"
-    selected: ai4s
+    selected: material
 
   - title: "MoMa: A Modular Deep Learning Framework for Material Property Prediction"
     authors: "Botian Wang, <b>Yawen Ouyang</b>, Yaohui Li, Yiqun Wang, Haorui Cui, Jianbing Zhang, Xiaonan Wang, Wei-Ying Ma, Hao Zhou"
     venue: "ICLR 2026."
     paper_pdf: "https://openreview.net/pdf?id=jiSt3M25TP"
     code: "https://github.com/GenSI-THUAIR/MoMa"
-    selected: ai4s
+    selected: material
 
   - title: "MOF-BFN: Metal-Organic Frameworks Structure Prediction via Bayesian Flow Networks"
     authors: "Rui Jiao, Hanlin Wu, Wenbing Huang, Yuxuan Song, <b>Yawen Ouyang</b>, Yu Rong, Tingyang Xu, Pengju Wang, Hao Zhou, Wei-Ying Ma, Jingjing Liu, Yang Liu"
     venue: "NeurIPS 2025."
     paper_pdf: "https://openreview.net/pdf?id=pNwiFucAtA"
     code: "https://github.com/jiaor17/MOF-BFN"
-    selected: ai4s
+    selected: material
 
   - title: "A Periodic Bayesian Flow for Material Generation"
     authors: "Hanlin Wu, Yuxuan Song, Jingjing Gong, Ziyao Cao, <b>Yawen Ouyang</b>, Jianbing Zhang, Hao Zhou, Wei-Ying Ma, Jingjing Liu"
     venue: "ICLR 2025 (Spotlight)."
     paper_pdf: "https://openreview.net/pdf?id=Lz0XW99tE0"
     code: "https://github.com/wu-han-lin/CrysBFN"
-    selected: ai4s
+    selected: material
 
   - title: "Towards Extrapolation in Deep Material Property Regression"
     authors: "Pan Mianzhi, JianFei Li, <b>Yawen Ouyang</b>, Wei-Ying Ma, Jianbing Zhang, Hao Zhou"
     venue: "AI4MAT-ICLR 2025 (Spotlight)."
     paper_pdf: "https://openreview.net/pdf?id=czVzzXPCkw"
     code: "https://github.com/panmianzhi/Matching-based-EXtrapolation"
-    selected: ai4s
+    selected: material
 
   - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
     authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
     venue: "Digital Discovery."
     paper_pdf: "https://pubs.rsc.org/en/content/articlepdf/2025/dd/d5dd00268k"
     code: "https://zenodo.org/records/17034464"
-    selected: ai4s
+    selected: material
 
   - title: "M2DF: Multi-grained Multi-curriculum Denoising Framework for Multimodal Aspect-based Sentiment Analysis"
     authors: "Fei Zhao, Chunhui Li, Zhen Wu, <b>Yawen Ouyang</b>, Jianbing Zhang, Xinyu Dai"

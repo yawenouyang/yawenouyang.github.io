@@ -53,6 +53,7 @@ papers:
     paper_pdf: "https://openreview.net/pdf?id=czVzzXPCkw"
     code: "https://github.com/panmianzhi/Matching-based-EXtrapolation"
     selected: material
+    hidden: true
 
   - title: "Generative AI-Powered Inverse Design for Tailored Narrowband Molecular Emitters"
     authors: "Mianzhi Pan, Tianhao Tan, <b>Yawen Ouyang</b>, Qian Jin, Yougang Chu, Wei-Ying Ma, Jianbing Zhang, Lian Duan, Dong Wang, Hao Zhou"
@@ -60,6 +61,7 @@ papers:
     paper_pdf: "https://pubs.rsc.org/en/content/articlepdf/2025/dd/d5dd00268k"
     code: "https://zenodo.org/records/17034464"
     selected: material
+    hidden: true
 
   - title: "M2DF: Multi-grained Multi-curriculum Denoising Framework for Multimodal Aspect-based Sentiment Analysis"
     authors: "Fei Zhao, Chunhui Li, Zhen Wu, <b>Yawen Ouyang</b>, Jianbing Zhang, Xinyu Dai"
@@ -75,6 +77,7 @@ papers:
     paper_pdf: "https://aclanthology.org/2023.findings-emnlp.726.pdf"
     code: "https://github.com/GuoQi2000/Debias_PDD"
     selected: nlp
+    hidden: true
 
   - title: "On Prefix-tuning for Lightweight Out-of-distribution Detection"
     authors: "<b>Yawen Ouyang</b>, Yongchang Cao, Yuan Gao, Zhen Wu, Jianbing Zhang, Xinyu Dai"
@@ -96,6 +99,7 @@ papers:
     paper_pdf: "https://aclanthology.org/2021.findings-acl.252.pdf"
     code: "https://github.com/yawenouyang/GOT"
     selected: nlp
+    hidden: true
 
   - title: "Dialogue State Tracking with Explicit Slot Connection Modeling"
     authors: "<b>Yawen Ouyang</b>, Moxin Chen, Xinyu Dai, Yinggong Zhao, Shujian Huang, Jiajun Chen"
